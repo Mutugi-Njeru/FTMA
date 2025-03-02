@@ -39,9 +39,13 @@ const Sidebar = () => {
         {
           icon: <BsDiagram3Fill size={16} />,
           label: "Value Chains",
-          path: "/settings",
+          path: "/products",
         },
-        { icon: <FaUsers size={16} />, label: "County Value", path: "/points" },
+        {
+          icon: <FaUsers size={16} />,
+          label: "County Products",
+          path: "/products/county-products",
+        },
         {
           icon: <MdAutoGraph size={16} />,
           label: "Market Prices",

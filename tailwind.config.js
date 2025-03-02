@@ -11,7 +11,9 @@ export default {
         customBrown: '#3b2b1f',
         customBrownLight:'#5a3d2a',
         customBaked: '#73b5cd',
-        customDisabled: '#d1cc80'
+        customDisabled: '#d1cc80',
+        customVeryLightBrown: "#EED9C4"
+
       },
     },
   },

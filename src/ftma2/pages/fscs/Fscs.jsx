@@ -1,0 +1,266 @@
+import React, { useEffect, useState } from "react";
+import { Home, Download, Plus } from "lucide-react";
+import axios from "axios";
+import Dividers from "./Dividers";
+import FscFilters from "./FscFilters";
+import FscTable from "./FscTable";
+import { getLocations } from "../../service/FscsService";
+import customSelectStyles3 from "../../../styles/customSelectStyles3";
+import Pagination from "./Pagination";
+
+const Fscs = () => {
+  const [counties, setCounties] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+  const [selectedSubcounty, setSelectedSubcounty] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [subCounties, setSubCounties] = useState([]);
+  const [wards, setWards] = useState([]);
+  const [tableData, setTableData] = useState([]);
+  const [startDate, setStartDate] = useState("2024-01-01");
+  const [endDate, setEndDate] = useState("2024-12-30");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const recordsPerPage = 10;
+
+  // Fetch initial counties data
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const response = await getLocations();
+        setCounties(response.data.data.counties);
+      } catch (err) {
+        console.error("Error fetching counties:", err);
+      }
+    };
+    fetchCounties();
+  }, []);
+
+  // Fetch data whenever any filter changes
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        let url = `https://ftma.egroup.co.ke/market-information/v1/api/fsc/list?pageNumber=${
+          currentPage + 1
+        }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
+        if (selectedCounty) url += `&countyIds=${selectedCounty.value}`;
+        if (selectedSubcounty)
+          url += `&subCountyIds=${selectedSubcounty.value}`;
+        if (selectedWard) url += `&wardIds=${selectedWard.value}`;
+
+        const response = await axios.get(url);
+        setTableData(response.data.data.fsc);
+        setTotalPages(
+          Math.ceil(response.data.data.totalRecords / recordsPerPage)
+        );
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [
+    currentPage,
+    startDate,
+    endDate,
+    selectedCounty,
+    selectedSubcounty,
+    selectedWard,
+  ]);
+
+  // Update sub-counties when county is selected
+  useEffect(() => {
+    if (selectedCounty) {
+      const county = counties.find((c) => c.countyId === selectedCounty.value);
+      setSubCounties(county ? county.subCounties : []);
+      setSelectedSubcounty(null);
+      setSelectedWard(null);
+    }
+  }, [selectedCounty, counties]);
+
+  // Update wards when sub-county is selected
+  useEffect(() => {
+    if (selectedSubcounty) {
+      const subCounty = subCounties.find(
+        (sc) => sc.subCountyId === selectedSubcounty.value
+      );
+      setWards(subCounty ? subCounty.wards : []);
+      setSelectedWard(null);
+    }
+  }, [selectedSubcounty, subCounties]);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+
+  const resetFilters = () => {
+    setSearchTerm("");
+    setSelectedCounty(null);
+    setSelectedSubcounty(null);
+    setSelectedWard(null);
+    setStartDate("2024-01-01");
+    setEndDate("2024-12-30");
+  };
+
+  const countyOptions = counties.map((county) => ({
+    value: county.countyId,
+    label: county.countyName,
+  }));
+  const subcountyOptions = subCounties.map((subCounty) => ({
+    value: subCounty.subCountyId,
+    label: subCounty.subCountyName,
+  }));
+  const wardOptions = wards.map((ward) => ({
+    value: ward.wardId,
+    label: ward.wardName,
+  }));
+
+  const handleCountyChange = (selectedOption) => {
+    setSelectedCounty(selectedOption);
+  };
+  const handleSubcountyChange = (selectedOption) => {
+    setSelectedSubcounty(selectedOption);
+  };
+  const handleWardChange = (selectedOption) => {
+    setSelectedWard(selectedOption);
+  };
+
+  const downloadCSV = () => {
+    const headers = [
+      "ID",
+      "Name",
+      "Phone Number",
+      "Market",
+      "County",
+      "Subcounty",
+      "Ward",
+      "Points",
+      "Date",
+    ];
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      headers.join(",") +
+      "\n" +
+      tableData
+        .map((item) =>
+          [
+            item.farmServiceCenterId,
+            `${item.firstName} ${item.lastName}`,
+            item.msisdn,
+            item.market,
+            item.county,
+            item.subCounty,
+            item.ward,
+            item.marketPointsBalance,
+            item.createdAt,
+          ].join(",")
+        )
+        .join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "fscs_data.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const filteredData = tableData.filter(
+    (item) =>
+      item.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.msisdn.includes(searchTerm) ||
+      item.market.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="px-2 py-2">
+      {/* Header */}
+      <div className="bg-white rounded-xl shadow-md p-5 mb-6 border border-gray-100">
+        <div className="flex items-center gap-4">
+          <div className="flex-shrink-0 p-3 bg-amber-50 rounded-lg">
+            <Home className="w-6 h-6 text-amber-600" />
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Farm Service Centers
+            </h2>
+            <p className="text-sm text-gray-600">
+              Providing agricultural support and resources to local farmers
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Title and Action Buttons */}
+      <div className="flex items-center justify-between mb-3">
+        <h1 className="text-2xl font-semibold text-gray-800">
+          Service Centers
+        </h1>
+        <div className="flex gap-3">
+          <button
+            onClick={downloadCSV}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors shadow-sm"
+          >
+            <Download className="w-4 h-4" />
+            <span className="text-sm font-medium">Export CSV</span>
+          </button>
+
+          <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+            <Plus className="w-4 h-4" />
+            <span className="text-sm font-medium">Create FSC</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <Dividers />
+
+      {/* Search and Filter */}
+      <FscFilters
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        showAdvancedFilters={showAdvancedFilters}
+        setShowAdvancedFilters={setShowAdvancedFilters}
+        resetFilters={resetFilters}
+        countyOptions={countyOptions}
+        selectedCounty={selectedCounty}
+        handleCountyChange={handleCountyChange}
+        subcountyOptions={subcountyOptions}
+        selectedSubcounty={selectedSubcounty}
+        handleSubcountyChange={handleSubcountyChange}
+        wardOptions={wardOptions}
+        selectedWard={selectedWard}
+        handleWardChange={handleWardChange}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        customSelectStyles2={customSelectStyles3}
+      />
+
+      {/* Table placeholder */}
+      <FscTable isLoading={isLoading} filteredData={filteredData} />
+
+      {/* Pagination */}
+      {filteredData.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+          filteredData={filteredData}
+          recordsPerPage={recordsPerPage}
+        />
+      )}
+    </div>
+  );
+};
+
+export default Fscs;
