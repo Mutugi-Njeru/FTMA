@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { GiCorn } from "react-icons/gi";
 import Select from "react-select";
-import { Download, Plus } from "lucide-react";
+import { Download, Plus, SlidersHorizontal } from "lucide-react";
 import { FaEllipsis } from "react-icons/fa6";
-import customSelectStyles2 from "../../styles/CustomSelectStyles2";
+import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import MarketPointFilters from "./MarketPointFilters";
 
-const Users = () => {
+const MarketPoints = () => {
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   return (
     <div className="bg-slate-100 p-2">
       {/* header */}
@@ -15,31 +17,43 @@ const Users = () => {
             <GiCorn className="w-6 h-6 text-amber-600" />{" "}
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-800">Users</h2>
+            <h2 className="text-lg font-semibold text-gray-800">
+              Market Points
+            </h2>
             <p className="text-sm text-gray-600">
               Providing agricultural support and resources to local farmers
             </p>
           </div>
         </div>
       </div>
+      <div className="justify-end flex">
+        <button
+          className="flex items-center cursor-pointer"
+          onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+        >
+          <SlidersHorizontal className="w-4 h-4" />
+          <span className="ml-2 mr-2">
+            {showAdvancedFilters ? "Hide Filters" : "Show Filters"}
+          </span>
+        </button>
+      </div>
+      {/* Filters Row */}
+      <MarketPointFilters showAdvancedFilters={showAdvancedFilters} />
 
-      <button className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
-        <Plus className="w-4 h-4" />
-        <span className="text-sm font-medium">Add User</span>
-      </button>
       {/* table */}
       <div className="mt-4 p-2 rounded-lg bg-white ">
         <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-              <th className="px-3 py-3">ID</th>
-              <th className="px-3 py-3">Name</th>
-              <th className="px-3 py-3">Email</th>
-              <th className="px-3 py-3">Username</th>
+              <th className="px-3 py-3">User</th>
+              <th className="px-3 py-3">County</th>
+              <th className="px-3 py-3">Market</th>
               <th className="px-3 py-3">Mobile</th>
-              <th className="px-3 py-3">Created At</th>
-              <th className="px-3 py-3">Updated At</th>
+              <th className="px-3 py-3">Points</th>
+              <th className="px-3 py-3">Equivalent</th>
+              <th className="px-3 py-3">Reward</th>
               <th className="px-3 py-3">Status</th>
+              <th className="px-3 py-3">Date</th>
               <th className="px-3 py-3">Action</th>
             </tr>
           </thead>
@@ -60,7 +74,8 @@ const Users = () => {
               <td className="px-3 py-2 truncate"> Tharaka Nith</td>
               <td className="px-3 py-2 truncate">Maara</td>
               <td className="px-3 py-2 truncate">Marima</td>
-              <td className="px-3 py-2 truncate">Marima</td>
+              <td className="px-4 py-3 whitespace-nowrap">78</td>
+              <td className="px-3 py-2 truncate"> 207865543</td>
               <td className="px-3 py-2 flex justify-center items-center">
                 <button
                   className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
@@ -77,4 +92,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default MarketPoints;

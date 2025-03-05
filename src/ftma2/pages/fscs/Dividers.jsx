@@ -13,38 +13,55 @@ const StatCard = ({ icon, title, value, hasDivider = true }) => (
     )}
   </div>
 );
+const currentDate = new Date();
+const formattedDate = currentDate.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
 
-const Dividers = () => {
+const Dividers = ({
+  totalFscs,
+  totalCounties,
+  totalSubcounties,
+  totalWards,
+}) => {
+  const totalDistinctCounties = totalCounties ? totalCounties.length : 0;
+
+  const totalDistinctSubCounties = totalSubcounties
+    ? totalSubcounties.length
+    : 0;
+  const totalDistinctWards = totalWards ? totalWards.length : 0;
   return (
     <div className="grid grid-cols-1 md:grid-cols-5 bg-white rounded-xl shadow-sm mb-6 overflow-hidden border border-gray-100">
       <StatCard
         icon={<Calendar className="w-4 h-4 text-amber-600" />}
         title="Today"
-        value="May 15, 2025"
+        value={formattedDate}
       />
 
       <StatCard
         icon={<Building2 className="w-4 h-4 text-amber-600" />}
         title="Total FSCs"
-        value="132"
+        value={totalFscs}
       />
 
       <StatCard
         icon={<MapPin className="w-4 h-4 text-amber-600" />}
         title="Total Counties"
-        value="47"
+        value={totalDistinctCounties}
       />
 
       <StatCard
         icon={<Map className="w-4 h-4 text-amber-600" />}
         title="Total Subcounties"
-        value="285"
+        value={totalDistinctSubCounties}
       />
 
       <StatCard
         icon={<MapPin className="w-4 h-4 text-amber-600" />}
         title="Total Wards"
-        value="1,450"
+        value={totalDistinctWards}
         hasDivider={false}
       />
     </div>

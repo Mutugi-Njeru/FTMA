@@ -4,9 +4,10 @@ import axios from "axios";
 import Dividers from "./Dividers";
 import FscFilters from "./FscFilters";
 import FscTable from "./FscTable";
-import { getLocations } from "../../service/FscsService";
+import { getDataForDownload, getLocations } from "../../service/FscsService";
 import customSelectStyles3 from "../../../styles/customSelectStyles3";
 import Pagination from "./Pagination";
+import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 
 const Fscs = () => {
   const [counties, setCounties] = useState([]);
@@ -23,6 +24,7 @@ const Fscs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [totalFscs, setTotalFscs] = useState(0);
   const recordsPerPage = 10;
 
   // Fetch initial counties data
@@ -43,9 +45,11 @@ const Fscs = () => {
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        let url = `https://ftma.egroup.co.ke/market-information/v1/api/fsc/list?pageNumber=${
-          currentPage + 1
-        }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
+        let url =
+          BASE_REST_API_URL +
+          `/fsc/list?pageNumber=${
+            currentPage + 1
+          }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
         if (selectedCounty) url += `&countyIds=${selectedCounty.value}`;
         if (selectedSubcounty)
           url += `&subCountyIds=${selectedSubcounty.value}`;
@@ -56,6 +60,7 @@ const Fscs = () => {
         setTotalPages(
           Math.ceil(response.data.data.totalRecords / recordsPerPage)
         );
+        setTotalFscs(response.data.data.totalRecords);
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {
@@ -72,6 +77,16 @@ const Fscs = () => {
     selectedSubcounty,
     selectedWard,
   ]);
+  // fetch all data for download
+  const fetchAllData = async () => {
+    try {
+      const response = await getDataForDownload();
+      return response.data.data.fsc;
+    } catch (err) {
+      console.error("Error fetching all data:", err);
+      return [];
+    }
+  };
 
   // Update sub-counties when county is selected
   useEffect(() => {
@@ -130,35 +145,40 @@ const Fscs = () => {
     setSelectedWard(selectedOption);
   };
 
-  const downloadCSV = () => {
+  const downloadCSV = async () => {
+    const allData = await fetchAllData();
     const headers = [
       "ID",
       "Name",
+      "Email",
+      "Gender",
       "Phone Number",
       "Market",
       "County",
       "Subcounty",
       "Ward",
       "Points",
-      "Date",
+      "CanRedeemPoints",
     ];
 
     const csvContent =
       "data:text/csv;charset=utf-8," +
       headers.join(",") +
       "\n" +
-      tableData
+      allData
         .map((item) =>
           [
             item.farmServiceCenterId,
             `${item.firstName} ${item.lastName}`,
+            item.email,
+            item.gender,
             item.msisdn,
             item.market,
             item.county,
             item.subCounty,
             item.ward,
             item.marketPointsBalance,
-            item.createdAt,
+            item.canRedeemPoints ? "Yes" : "No",
           ].join(",")
         )
         .join("\n");
@@ -221,7 +241,12 @@ const Fscs = () => {
       </div>
 
       {/* Stats Cards */}
-      <Dividers />
+      <Dividers
+        totalFscs={totalFscs}
+        totalCounties={counties}
+        totalSubcounties={subcountyOptions}
+        totalWards={wardOptions}
+      />
 
       {/* Search and Filter */}
       <FscFilters

@@ -6,7 +6,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed top-0 left-48 right-0 shadow-md bg-white border border-gray-300 rounded-tr-lg">
+    <div className="fixed p-1 top-0 left-48 right-0 shadow-md bg-white border border-gray-300 rounded-tr-lg">
       <div className="flex flex-row items-center justify-between">
         <div className="text-center p-3">
           <h1 className="font-semibold">Market Information</h1>

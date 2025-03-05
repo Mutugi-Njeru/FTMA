@@ -9,10 +9,10 @@ const capitalizeFirstLetter = (str) => {
 
 const FscTable = ({ isLoading, filteredData }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-1 border border-gray-100">
+    <div className="bg-white rounded-xl shadow-sm  border border-gray-100">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
-          <ClipLoader color="#4F46E5" size={50} />
+          <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
         <div className="text-center text-gray-500">
@@ -40,27 +40,27 @@ const FscTable = ({ isLoading, filteredData }) => {
                   >
                     <td
                       scope="row"
-                      className="px-3 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
+                      className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
                     >
                       {item.farmServiceCenterId}
                     </td>
-                    <td className="px-3 py-3 truncate">
+                    <td className="px-3 py-2 truncate">
                       {item.firstName} {item.lastName}
                     </td>
-                    <td className="px-3 py-3 truncate"> {item.msisdn}</td>
-                    <td className="px-3 py-3 truncate">{item.market}</td>
-                    <td className="px-3 py-3 truncate"> {item.county}</td>
-                    <td className="px-3 py-3 truncate">
+                    <td className="px-3 py-2 truncate"> {item.msisdn}</td>
+                    <td className="px-3 py-2 truncate">{item.market}</td>
+                    <td className="px-3 py-2 truncate"> {item.county}</td>
+                    <td className="px-3 py-2 truncate">
                       {capitalizeFirstLetter(item.subCounty)}
                     </td>
-                    <td className="px-3 py-3 truncate">
+                    <td className="px-3 py-2 truncate">
                       {capitalizeFirstLetter(item.ward)}
                     </td>
-                    <td className="px-3 py-3 truncate">
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {item.marketPointsBalance}
                     </td>
-                    <td className="px-3 py-3 truncate"> {item.createdAt}</td>
-                    <td className="px-3 py-3 flex justify-center items-center">
+                    <td className="px-3 py-2 truncate"> {item.createdAt}</td>
+                    <td className="px-3 py-2 flex justify-center items-center">
                       <button
                         className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                         aria-label="More actions"

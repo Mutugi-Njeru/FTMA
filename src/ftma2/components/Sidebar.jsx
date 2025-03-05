@@ -49,18 +49,22 @@ const Sidebar = () => {
         {
           icon: <MdAutoGraph size={16} />,
           label: "Market Prices",
-          path: "/points",
+          path: "/products/market-prices",
         },
-        { icon: <FaUser size={16} />, label: "Prices per Kg", path: "/points" },
+        {
+          icon: <FaUser size={16} />,
+          label: "Prices per Kg",
+          path: "/products/price-per-kg",
+        },
         {
           icon: <MdAutoGraph size={16} />,
           label: "Average Prices",
-          path: "/points",
+          path: "/products/average-prices",
         },
         {
           icon: <FaUserCircle size={16} />,
           label: "Price Ranges",
-          path: "/points",
+          path: "/products/price-ranges",
         },
       ],
     },
