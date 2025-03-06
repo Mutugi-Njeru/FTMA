@@ -50,7 +50,6 @@ const ValueChains = () => {
       setError("Failed to load data. Please try again later.");
     } finally {
       setLoading(false);
-      setIsRefreshing(false);
     }
   };
 

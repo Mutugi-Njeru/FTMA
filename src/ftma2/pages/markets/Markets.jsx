@@ -1,12 +1,128 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiCorn } from "react-icons/gi";
 import { FaEllipsis } from "react-icons/fa6";
 import { Download, Plus, SlidersHorizontal } from "lucide-react";
 import MarketsFilters from "./MarketsFilters";
 import MarketsHeader from "./MarketsHeader";
+import { getLocations } from "../../service/FscsService";
+import { BASE_REST_API_URL } from "../../service/CountyProductsService";
+import axios from "axios";
+import MarketsTable from "./MarketsTable";
+import Pagination from "./Pagination";
 
 const Markets = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [counties, setCounties] = useState([]);
+  const [subCounties, setSubCounties] = useState([]);
+  const [selectedSubcounty, setSelectedSubcounty] = useState(null);
+  const [selectedWard, setSelectedWard] = useState(null);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+  const [wards, setWards] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [tableData, setTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startDate, setStartDate] = useState("2024-01-01");
+  const [endDate, setEndDate] = useState("2024-12-30");
+  const [totalRecords, setTotalRecords] = useState(0);
+  const recordsPerPage = 15;
+
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const response = await getLocations();
+        setCounties(response.data.data.counties);
+      } catch (err) {
+        console.error("Error fetching counties:", err);
+      }
+    };
+    fetchCounties();
+  }, []);
+
+  // Fetch data whenever any filter changes
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/markets/list?pageNumber=${
+            currentPage + 1
+          }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
+        if (selectedCounty) url += `&countyIds=${selectedCounty.value}`;
+        if (selectedSubcounty)
+          url += `&subCountyIds=${selectedSubcounty.value}`;
+        if (selectedWard) url += `&wardIds=${selectedWard.value}`;
+
+        const response = await axios.get(url);
+        setTableData(response.data.data.markets);
+        setTotalPages(
+          Math.ceil(response.data.data.totalRecords / recordsPerPage)
+        );
+        setTotalRecords(response.data.data.totalRecords);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [
+    currentPage,
+    startDate,
+    endDate,
+    selectedCounty,
+    selectedSubcounty,
+    selectedWard,
+  ]);
+
+  // Update sub-counties when county is selected
+  useEffect(() => {
+    if (selectedCounty) {
+      const county = counties.find((c) => c.countyId === selectedCounty.value);
+      setSubCounties(county ? county.subCounties : []);
+      setSelectedSubcounty(null);
+      setSelectedWard(null);
+    }
+  }, [selectedCounty, counties]);
+  // Update wards when sub-county is selected
+  useEffect(() => {
+    if (selectedSubcounty) {
+      const subCounty = subCounties.find(
+        (sc) => sc.subCountyId === selectedSubcounty.value
+      );
+      setWards(subCounty ? subCounty.wards : []);
+      setSelectedWard(null);
+    }
+  }, [selectedSubcounty, subCounties]);
+
+  const handlePageChange = (selectedItem) => {
+    setCurrentPage(selectedItem.selected);
+  };
+  const countyOptions = counties.map((county) => ({
+    value: county.countyId,
+    label: county.countyName,
+  }));
+  const subcountyOptions = subCounties.map((subCounty) => ({
+    value: subCounty.subCountyId,
+    label: subCounty.subCountyName,
+  }));
+  const wardOptions = wards.map((ward) => ({
+    value: ward.wardId,
+    label: ward.wardName,
+  }));
+
+  const handleCountyChange = (selectedOption) => {
+    setSelectedCounty(selectedOption);
+  };
+  const handleSubcountyChange = (selectedOption) => {
+    setSelectedSubcounty(selectedOption);
+  };
+  const handleWardChange = (selectedOption) => {
+    setSelectedWard(selectedOption);
+  };
+
   return (
     <div className="bg-slate-100 p-2">
       {/* header */}
@@ -34,52 +150,35 @@ const Markets = () => {
       </div>
 
       {/* Filters Row */}
-      <MarketsFilters showAdvancedFilters={showAdvancedFilters} />
+      <MarketsFilters
+        showAdvancedFilters={showAdvancedFilters}
+        countyOptions={countyOptions}
+        selectedCounty={selectedCounty}
+        handleCountyChange={handleCountyChange}
+        subcountyOptions={subcountyOptions}
+        selectedSubcounty={selectedSubcounty}
+        handleSubcountyChange={handleSubcountyChange}
+        wardOptions={wardOptions}
+        selectedWard={selectedWard}
+        handleWardChange={handleWardChange}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        endDate={endDate}
+        setEndDate={setEndDate}
+      />
 
       {/* table */}
-      <div className="mt-4 p-2 rounded-lg bg-white ">
-        <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-            <tr>
-              <th className="px-3 py-3">ID</th>
-              <th className="px-3 py-3">Market Title</th>
-              <th className="px-3 py-3">County</th>
-              <th className="px-3 py-3">Subcounty</th>
-              <th className="px-3 py-3">Ward</th>
-              <th className="px-3 py-3">Date Created</th>
-              <th className="px-3 py-3">Date Updated</th>
-              <th className="px-3 py-3">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              key=""
-              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-            >
-              <td
-                scope="row"
-                className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
-              >
-                10
-              </td>
-              <td className="px-3 py-2 truncate">John Doe</td>
-              <td className="px-3 py-2 truncate"> 25467864666</td>
-              <td className="px-3 py-2 truncate">Maguna</td>
-              <td className="px-3 py-2 truncate"> Tharaka Nith</td>
-              <td className="px-3 py-2 truncate">Maara</td>
-              <td className="px-3 py-2 truncate">Marima</td>
-              <td className="px-3 py-2 flex justify-center items-center">
-                <button
-                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                  aria-label="More actions"
-                >
-                  <FaEllipsis />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <MarketsTable isLoading={isLoading} tableData={tableData} />
+      {/* Pagination */}
+      {tableData.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handlePageChange={handlePageChange}
+          filteredData={tableData}
+          recordsPerPage={recordsPerPage}
+        />
+      )}
     </div>
   );
 };

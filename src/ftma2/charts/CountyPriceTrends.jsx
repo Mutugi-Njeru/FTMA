@@ -9,78 +9,119 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Label,
 } from "recharts";
 import { format } from "date-fns";
 import { FiDownload } from "react-icons/fi";
 import customSelectStyles from "../../styles/customSelectStyles";
+import { getLocations } from "../service/FscsService";
+import axios from "axios";
+import { BASE_REST_API_URL } from "../service/CountyProductsService";
 
-const mockData = {
-  counties: ["Nairobi", "Mombasa", "Kisumu"],
-  products: ["Maize", "Potatoes", "Beans"],
-  priceData: [
-    {
-      date: "2024-01-01",
-      product: "Maize",
-      county: "Nairobi",
-      farmPrice: 30,
-      retailPrice: 45,
-      marketPrice: 40,
-    },
-    {
-      date: "2024-01-02",
-      product: "Maize",
-      county: "Nairobi",
-      farmPrice: 32,
-      retailPrice: 47,
-      marketPrice: 42,
-    },
-    {
-      date: "2024-01-03",
-      product: "Maize",
-      county: "Mombasa",
-      farmPrice: 31,
-      retailPrice: 46,
-      marketPrice: 41,
-    },
-    {
-      date: "2024-01-04",
-      product: "Beans",
-      county: "Kisumu",
-      farmPrice: 83,
-      retailPrice: 103,
-      marketPrice: 93,
-    },
-  ],
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toLocaleDateString("en-CA"); // Ensures YYYY-MM-DD format in local time
 };
-
 function CountyPriceTrends() {
-  const [selectedCounty, setSelectedCounty] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
+  const [startDate, setStartDate] = useState("2025-02-27");
+  const [endDate, setEndDate] = useState(getTodayDate());
+  const [counties, setCounties] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [countyProducts, setCountyProducts] = useState([]);
+  const [chartData, setChartData] = useState([]);
 
+  // Fetch initial counties data
   useEffect(() => {
-    if (selectedCounty && selectedProduct && fromDate && toDate) {
-      const filtered = mockData.priceData.filter(
-        (item) =>
-          item.county === selectedCounty &&
-          item.product === selectedProduct &&
-          item.date >= fromDate &&
-          item.date <= toDate
-      );
-      setFilteredData(filtered);
-    }
-  }, [selectedCounty, selectedProduct, fromDate, toDate]);
+    const fetchCounties = async () => {
+      try {
+        const response = await getLocations();
+        setCounties(response.data.data.counties);
 
-  const countyOptions = mockData.counties.map((county) => ({
-    value: county,
-    label: county,
+        // Set default county to countyId 13
+        const defaultCounty = response.data.data.counties.find(
+          (county) => county.countyId === 13
+        );
+        if (defaultCounty) {
+          setSelectedCounty({
+            value: defaultCounty.countyId,
+            label: defaultCounty.countyName,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching counties:", err);
+      }
+    };
+    fetchCounties();
+  }, []);
+
+  // Fetch countyProducts when selectedCounty changes
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!selectedCounty) return; // Don't fetch if no county is selected
+
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/county-products/list?countyIds=${selectedCounty.value}`;
+        const response = await axios.get(url);
+        setCountyProducts(response.data.data.countyProducts);
+        // Set default product to productId 84
+        const defaultProduct = response.data.data.countyProducts.find(
+          (product) => product.countyProductId === 84
+        );
+        if (defaultProduct) {
+          setSelectedProduct({
+            value: defaultProduct.countyProductId,
+            label: defaultProduct.product,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [selectedCounty]);
+
+  // Fetch barchart data
+  useEffect(() => {
+    const fetchData = async () => {
+      // Ensure both selectedCounty and selectedProduct are not null
+      if (!selectedCounty || !selectedProduct) return;
+
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/report/prices-trends?countyProductId=${selectedProduct.value}&countyId=${selectedCounty.value}&startDate=${startDate}&endDate=${endDate}`;
+        const response = await axios.get(url);
+        setChartData(response.data.data.pricesTrend);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [selectedCounty, selectedProduct, startDate, endDate]);
+
+  const countyOptions = counties.map((county) => ({
+    value: county.countyId,
+    label: county.countyName,
   }));
-  const productOptions = mockData.products.map((product) => ({
-    value: product,
-    label: product,
+
+  const productOptions = countyProducts.map((product) => ({
+    value: product.countyProductId,
+    label: product.product,
   }));
+
+  const handleCountyChange = (selectedOption) => {
+    setSelectedCounty(selectedOption);
+    setSelectedProduct(null);
+  };
+
+  const handleProductChange = (selectedOption) => {
+    setSelectedProduct(selectedOption);
+  };
 
   return (
     <div className=" bg-slate-50 p-4">
@@ -92,77 +133,60 @@ function CountyPriceTrends() {
           <div className="flex items-center space-x-3 ">
             <input
               type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
               className="border rounded-lg text-sm px-2"
             />
             <input
               type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
               className="border rounded-lg text-sm px-2"
             />
             <Select
               options={countyOptions}
-              value={countyOptions.find(
-                (option) => option.value === selectedCounty
-              )}
+              value={selectedCounty}
+              onChange={handleCountyChange}
               styles={customSelectStyles}
-              onChange={(option) => setSelectedCounty(option.value)}
               className="w-32 text-xs"
               placeholder="County"
             />
             <Select
               options={productOptions}
-              value={productOptions.find(
-                (option) => option.value === selectedProduct
-              )}
+              value={selectedProduct}
+              onChange={handleProductChange}
               styles={customSelectStyles}
-              onChange={(option) => setSelectedProduct(option.value)}
               className="w-32 text-xs"
               placeholder="Product"
             />
-            <button
-              onClick={() => {
-                const csvData = filteredData
-                  .map(
-                    (item) =>
-                      `${item.date},${item.product},${item.county},${item.farmPrice},${item.retailPrice},${item.marketPrice}`
-                  )
-                  .join("\n");
-                const blob = new Blob(
-                  [
-                    `Date,Product,County,Farm Price,Retail Price,Market Price\n${csvData}`,
-                  ],
-                  { type: "text/csv" }
-                );
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = "selected_data.csv";
-                a.click();
-                window.URL.revokeObjectURL(url);
-              }}
-              disabled={filteredData.length === 0}
-              className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed"
-            >
+            <button className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed">
               <FiDownload size={22} />
             </button>
           </div>
         </div>
 
-        {filteredData.length > 0 ? (
+        {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={filteredData}>
+            <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis
                 dataKey="date"
                 tickFormatter={(date) => format(new Date(date), "MMM d")}
                 stroke="#6b7280"
-              />
-              <YAxis stroke="#6b7280" />
+              >
+                <Label value="Date" offset={-5} position="insideBottom" />
+              </XAxis>
+              <YAxis stroke="#6b7280">
+                <Label
+                  value="Price (Ksh)"
+                  angle={-90}
+                  position="insideLeft"
+                  offset={0}
+                  style={{ textAnchor: "middle" }}
+                />
+              </YAxis>
               <Tooltip />
-              <Legend />
+              {/* <Legend /> */}
               <Line
                 type="monotone"
                 dataKey="farmPrice"
@@ -172,10 +196,10 @@ function CountyPriceTrends() {
               />
               <Line
                 type="monotone"
-                dataKey="marketPrice"
+                dataKey="wholesalePrice"
                 stroke="#bab600"
                 strokeWidth={2}
-                name="Market Price"
+                name="Wholesale Price"
               />
               <Line
                 type="monotone"
@@ -189,9 +213,6 @@ function CountyPriceTrends() {
         ) : (
           <div className="text-center py-20">
             <div className="text-gray-400 mb-2">No data to display</div>
-            <p className="text-sm text-gray-500">
-              Select all filters to view the price trends
-            </p>
           </div>
         )}
       </div>

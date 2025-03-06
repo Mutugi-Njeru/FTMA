@@ -1,36 +1,58 @@
 import React from "react";
 import Select from "react-select";
 import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import { motion } from "framer-motion";
 
-const PrriceRangeFilters = ({ showAdvancedFilters }) => {
+const PrriceRangeFilters = ({
+  showAdvancedFilters,
+  countyOptions,
+  selectedCounty,
+  handleCountyChange,
+  subcountyOptions,
+  selectedSubcounty,
+  handleSubcountyChange,
+  wardOptions,
+  selectedWard,
+  handleWardChange,
+  startDate,
+  setStartDate,
+  endDate,
+  setEndDate,
+}) => {
   return (
     <div>
       {showAdvancedFilters && (
-        <div className="border rounded-lg bg-white pt-2 pl-2">
+        <motion.div
+          initial={{ x: "100%", opacity: 0 }} // Start from the right and invisible
+          animate={{ x: 0, opacity: 1 }} // Slide to the left and become visible
+          transition={{ type: "tween", duration: 0.8 }} // Slower, smoother transition
+          // transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
+          className="border rounded-lg bg-white pt-2 pl-2"
+        >
           <div className="rounded-lg mb-2 p-2">
-            <div className="flex flex-row items-center ">
+            <div className="flex flex-row items-center">
               <Select
-                // options={countyOptions}
-                // value={selectedCounty}
-                // onChange={handleCountyChange}
+                options={countyOptions}
+                value={selectedCounty}
+                onChange={handleCountyChange}
                 placeholder="county"
                 styles={customSelectStyles2}
                 isClearable
                 className=" mr-2 w-32"
               />
               <Select
-                // options={countyOptions}
-                // value={selectedCounty}
-                // onChange={handleCountyChange}
+                options={subcountyOptions}
+                value={selectedSubcounty}
+                onChange={handleSubcountyChange}
                 placeholder="Subcounty"
                 styles={customSelectStyles2}
                 isClearable
                 className="w-32 mr-2"
               />
               <Select
-                // options={countyOptions}
-                // value={selectedCounty}
-                // onChange={handleCountyChange}
+                options={wardOptions}
+                value={selectedWard}
+                onChange={handleWardChange}
                 placeholder="ward"
                 styles={customSelectStyles2}
                 isClearable
@@ -39,20 +61,20 @@ const PrriceRangeFilters = ({ showAdvancedFilters }) => {
 
               <input
                 type="date"
-                // value={startDate}
-                // onChange={(e) => setStartDate(e.target.value)}
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
                 className=" p-1.5 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
               <input
                 type="date"
-                // value={endDate}
-                // onChange={(e) => setEndDate(e.target.value)}
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
                 className=" p-1.5 ml-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

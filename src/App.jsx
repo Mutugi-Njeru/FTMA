@@ -3,7 +3,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Dashboard from "./ftma2/components/Dashboard";
 import Overview from "./ftma2/pages/Overview";
-import Users from "./ftma2/pages/Users";
 import Settings from "./ftma2/pages/Settings";
 import Analytics from "./ftma2/pages/Analytics";
 import Login from "./ftma2/pages/Login";
@@ -17,6 +16,7 @@ import AveragePrices from "./ftma2/pages/averagePrices/AveragePrices";
 import PriceRanges from "./ftma2/pages/priceRanges/PriceRanges";
 import MarketPoints from "./ftma2/pages/marketPoints/MarketPoints";
 import Markets from "./ftma2/pages/markets/Markets";
+import Users from "./ftma2/pages/users/Users";
 
 function App() {
   return (

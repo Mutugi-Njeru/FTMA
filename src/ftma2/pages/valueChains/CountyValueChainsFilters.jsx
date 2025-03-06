@@ -1,6 +1,7 @@
 import { Download, Plus } from "lucide-react";
 import Select from "react-select";
 import React from "react";
+import { motion } from "framer-motion"; // Import Framer Motion
 
 const CountyValueChainsFilters = ({
   countyOptions,
@@ -16,7 +17,13 @@ const CountyValueChainsFilters = ({
   return (
     <div>
       {showAdvancedFilters && (
-        <div className="border rounded-lg bg-white pt-2 pl-2">
+        <motion.div
+          initial={{ x: "100%", opacity: 0 }} // Start from the right and invisible
+          animate={{ x: 0, opacity: 1 }} // Slide to the left and become visible
+          transition={{ type: "tween", duration: 0.8 }}
+          // transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
+          className="border rounded-lg bg-white pt-2 pl-2"
+        >
           <div className="rounded-lg mb-2 p-2">
             <div className="flex flex-row items-center justify-between">
               <div className="flex flex-row">
@@ -50,7 +57,7 @@ const CountyValueChainsFilters = ({
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

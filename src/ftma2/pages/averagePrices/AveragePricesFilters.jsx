@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import { motion } from "framer-motion";
 
 const AveragePricesFilters = ({
   showAdvancedFilters,
@@ -21,7 +22,12 @@ const AveragePricesFilters = ({
   return (
     <div>
       {showAdvancedFilters && (
-        <div className="border rounded-lg bg-white pt-2 pl-2">
+        <motion.div
+          initial={{ x: "100%", opacity: 0 }} // Start off-screen to the right
+          animate={{ x: 0, opacity: 1 }} // Slide in to the left
+          transition={{ type: "tween", duration: 0.8 }} // Slower, smoother transition
+          className="border rounded-lg bg-white pt-2 pl-2"
+        >
           <div className="rounded-lg mb-2 p-2">
             <div className="flex flex-row items-center">
               <Select
@@ -68,7 +74,7 @@ const AveragePricesFilters = ({
             </div>
             {/* buttons */}
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );

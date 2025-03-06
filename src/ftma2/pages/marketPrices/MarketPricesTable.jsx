@@ -4,7 +4,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const MarketPricesTable = ({ isLoading, tableData }) => {
   return (
-    <div className="mt-4 p-2 rounded-lg bg-white ">
+    <div className="mt-4 p-2 rounded-lg bg-white">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <ClipLoader color="#D97706" size={50} />
@@ -13,17 +13,19 @@ const MarketPricesTable = ({ isLoading, tableData }) => {
         <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
-              <th className="px-3 py-3">ID</th>
-              <th className="px-3 py-3">Value Chain</th>
-              <th className="px-3 py-3">Market</th>
-              <th className="px-3 py-3">County</th>
-              <th className="px-3 py-3">Fsc Name</th>
-              <th className="px-3 py-3">Unit</th>
-              <th className="px-3 py-3">Farm Price</th>
-              <th className="px-3 py-3">Retail Price</th>
-              <th className="px-3 py-3">Wholesale Price</th>
-              <th className="px-3 py-3">Date Created</th>
-              <th className="px-3 py-3">Action</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">ID</th>
+              <th className="px-3 py-3 truncate max-w-[150px]">Value Chain</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">Market</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">County</th>
+              <th className="px-3 py-3 truncate max-w-[150px]">Fsc Name</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">Unit</th>
+              <th className="px-3 py-3 truncate max-w-[80px]">Farm Price</th>
+              <th className="px-3 py-3 truncate max-w-[80px]">Retail Price</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">
+                Wholesale Price
+              </th>
+              <th className="px-3 py-3 truncate max-w-[150px]">Date Created</th>
+              <th className="px-3 py-3 truncate max-w-[100px]">Action</th>
             </tr>
           </thead>
           <tbody>

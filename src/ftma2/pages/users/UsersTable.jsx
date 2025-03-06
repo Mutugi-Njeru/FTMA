@@ -2,13 +2,15 @@ import React from "react";
 import { FaEllipsis } from "react-icons/fa6";
 import ClipLoader from "react-spinners/ClipLoader";
 
-// Helper function to capitalize the first letter of a string
-const capitalizeFirstLetter = (str) => {
-  if (!str) return str; // Handle empty strings
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-};
+const UsersTable = ({ isLoading, tableData }) => {
+  // Function to truncate text
+  const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + "...";
+    }
+    return text;
+  };
 
-const AveragePricesTable = ({ isLoading, tableData }) => {
   return (
     <div className="mt-4 p-2 rounded-lg bg-white ">
       {isLoading ? (
@@ -20,49 +22,57 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-3 py-3">ID</th>
-              <th className="px-3 py-3">Value Chain</th>
-              <th className="px-3 py-3">Quantity (kg)</th>
-              <th className="px-3 py-3">Market</th>
-              <th className="px-3 py-3">County</th>
-              <th className="px-3 py-3">Fsc Name</th>
-              <th className="px-3 py-3">Farm Price</th>
-              <th className="px-3 py-3">Retail Price</th>
-              <th className="px-3 py-3">Wholesale Price</th>
-              <th className="px-3 py-3">Date Created</th>
+              <th className="px-3 py-3">Name</th>
+              <th className="px-3 py-3">Email</th>
+              <th className="px-3 py-3">Username</th>
+              <th className="px-3 py-3">Mobile</th>
+              <th className="px-3 py-3">Created At</th>
+              <th className="px-3 py-3">Updated At</th>
+              <th className="px-3 py-3">Status</th>
+              <th className="px-3 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
             {tableData.length > 0 ? (
               tableData.map((item) => (
                 <tr
-                  key={item.productId}
+                  key={item.userId}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <td
                     scope="row"
                     className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
                   >
-                    {item.productId}
+                    {item.userId}
                   </td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.product)}
+                    {item.firstName} {item.lastName}
                   </td>
-                  <td className="px-3 py-2 truncate"> {item.quantityInKgs}</td>
+                  <td className="px-3 py-2 truncate"> {item.email}</td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.market)}
+                    {truncateText(item.username, 10)}{" "}
+                    {/* Truncate username to 10 characters */}
+                  </td>
+                  <td className="px-3 py-2 truncate">{item.msisdn}</td>
+                  <td className="px-3 py-2 truncate">
+                    {truncateText(item.createdAt, 10)}{" "}
+                    {/* Truncate createdAt to 10 characters */}
                   </td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.county)}
+                    {truncateText(item.updatedAt, 10)}{" "}
+                    {/* Truncate updatedAt to 10 characters */}
                   </td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.fscName)}
+                    {item.active ? "Active" : "Inactive"}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.farmPrice}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {item.retailPrice}
+                  <td className="px-3 py-2 flex justify-center items-center">
+                    <button
+                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                      aria-label="More actions"
+                    >
+                      <FaEllipsis />
+                    </button>
                   </td>
-                  <td className="px-3 py-2 truncate"> {item.wholesalePrice}</td>
-                  <td className="px-3 py-2 truncate"> {item.createdAt}</td>
                 </tr>
               ))
             ) : (
@@ -82,4 +92,4 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
   );
 };
 
-export default AveragePricesTable;
+export default UsersTable;

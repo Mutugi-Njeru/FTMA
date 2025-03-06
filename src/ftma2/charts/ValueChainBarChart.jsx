@@ -1,57 +1,84 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   CartesianGrid,
+  Label,
 } from "recharts";
 import Select from "react-select";
 import html2canvas from "html2canvas";
 import { FiDownload } from "react-icons/fi";
 import customSelectStyles from "../../styles/customSelectStyles";
+import { getLocations } from "../service/FscsService";
+import { BASE_REST_API_URL } from "../service/CountyProductsService";
+import axios from "axios";
 
-const countries = [
-  { value: "USA", label: "USA" },
-  { value: "UK", label: "UK" },
-  { value: "Germany", label: "Germany" },
-  { value: "Kenya", label: "Kenya" },
-];
-
-const sampleData = {
-  "2024-02-21": {
-    USA: [
-      { name: "Town A", cars: 400, buses: 200, taxis: 100 },
-      { name: "Town B", cars: 300, buses: 250, taxis: 150 },
-      { name: "Town C", cars: 500, buses: 300, taxis: 200 },
-    ],
-    UK: [
-      { name: "Town A", cars: 250, buses: 150, taxis: 100 },
-      { name: "Town B", cars: 450, buses: 250, taxis: 200 },
-      { name: "Town C", cars: 350, buses: 200, taxis: 180 },
-    ],
-    Germany: [
-      { name: "Town A", cars: 320, buses: 180, taxis: 120 },
-      { name: "Town B", cars: 380, buses: 220, taxis: 140 },
-      { name: "Town C", cars: 420, buses: 240, taxis: 160 },
-    ],
-    Kenya: [
-      { name: "Town A", cars: 320, buses: 180, taxis: 120 },
-      { name: "Town B", cars: 380, buses: 220, taxis: 140 },
-      { name: "Town C", cars: 420, buses: 240, taxis: 160 },
-      { name: "Town C", cars: 420, buses: 240, taxis: 160 },
-      { name: "Town C", cars: 420, buses: 240, taxis: 160 },
-      { name: "Town C", cars: 420, buses: 240, taxis: 160 },
-    ],
-  },
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toLocaleDateString("en-CA"); // Ensures YYYY-MM-DD format in local time
 };
 
 const ValueChainBarChart = () => {
-  const [date, setDate] = useState("2024-02-21"); //state initialized with today date
-  const [country, setCountry] = useState(countries[0]); //state of countries
+  const [date, setDate] = useState(getTodayDate()); // Dynamic date
+  const [counties, setCounties] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+  const [chartData, setChartData] = useState([]);
+
+  // Fetch initial counties data
+  useEffect(() => {
+    const fetchCounties = async () => {
+      try {
+        const response = await getLocations();
+        setCounties(response.data.data.counties);
+
+        // Set default county to countyId 13
+        const defaultCounty = response.data.data.counties.find(
+          (county) => county.countyId === 13
+        );
+        if (defaultCounty) {
+          setSelectedCounty({
+            value: defaultCounty.countyId,
+            label: defaultCounty.countyName,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching counties:", err);
+      }
+    };
+    fetchCounties();
+  }, []);
+
+  // Fetch barchart data
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!selectedCounty) return; // Don't fetch if no county is selected
+
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/report/daily-prices?date=${date}&countyId=${selectedCounty.value}`;
+        const response = await axios.get(url);
+        setChartData(response.data.data.dailyPrices);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
+  }, [date, selectedCounty]);
+
+  const countyOptions = counties.map((county) => ({
+    value: county.countyId,
+    label: county.countyName,
+  }));
+
+  const handleCountyChange = (selectedOption) => {
+    setSelectedCounty(selectedOption);
+  };
 
   const handleDownload = () => {
     const chartElement = document.getElementById("chart-container");
@@ -76,9 +103,9 @@ const ValueChainBarChart = () => {
             className="border rounded-lg text-sm pr-1"
           />
           <Select
-            options={countries}
-            value={country}
-            onChange={setCountry}
+            options={countyOptions}
+            value={selectedCounty}
+            onChange={handleCountyChange}
             styles={customSelectStyles}
             className="w-32 text-xs"
           />
@@ -96,24 +123,48 @@ const ValueChainBarChart = () => {
         id="chart-container"
         className="w-full flex items-center justify-center"
       >
-        <ResponsiveContainer width="100%" height={230}>
-          <BarChart data={sampleData[date]?.[country.value] || []}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis
-              label={{
-                value: "Price per Kg",
-                angle: -90,
-                position: "insideBottomLeft",
-              }}
-            />
-            <Tooltip />
-            {/* <Legend /> */}
-            <Bar dataKey="cars" fill="#bab600" name="Cars" barSize={24} />
-            <Bar dataKey="buses" fill="#3b2b1f" name="Buses" barSize={24} />
-            <Bar dataKey="taxis" fill="#73b5cd" name="Taxis" barSize={24} />
-          </BarChart>
-        </ResponsiveContainer>
+        {chartData.length > 0 && selectedCounty ? (
+          <ResponsiveContainer width="100%" height={230}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="product">
+                <Label
+                  value="Value Chains"
+                  offset={-5}
+                  position="insideBottom"
+                />
+              </XAxis>
+              <YAxis
+                label={{
+                  value: "Price per Kg (Ksh)",
+                  angle: -90,
+                  position: "insideBottomLeft",
+                }}
+              />
+              <Tooltip />
+              <Bar
+                dataKey="farmPrice"
+                fill="#bab600"
+                name="Farm Price"
+                barSize={24}
+              />
+              <Bar
+                dataKey="retailPrice"
+                fill="#3b2f1f"
+                name="Retail Price"
+                barSize={24}
+              />
+              <Bar
+                dataKey="wholesalePrice"
+                fill="#73b5cd"
+                name="Wholesale Price"
+                barSize={24}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <p className="text-gray-500">No data available</p>
+        )}
       </div>
     </div>
   );

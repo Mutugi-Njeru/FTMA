@@ -8,7 +8,7 @@ const capitalizeFirstLetter = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const AveragePricesTable = ({ isLoading, tableData }) => {
+const MarketsTable = ({ isLoading, tableData }) => {
   return (
     <div className="mt-4 p-2 rounded-lg bg-white ">
       {isLoading ? (
@@ -20,49 +20,43 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50">
             <tr>
               <th className="px-3 py-3">ID</th>
-              <th className="px-3 py-3">Value Chain</th>
-              <th className="px-3 py-3">Quantity (kg)</th>
-              <th className="px-3 py-3">Market</th>
+              <th className="px-3 py-3">Market Title</th>
               <th className="px-3 py-3">County</th>
-              <th className="px-3 py-3">Fsc Name</th>
-              <th className="px-3 py-3">Farm Price</th>
-              <th className="px-3 py-3">Retail Price</th>
-              <th className="px-3 py-3">Wholesale Price</th>
+              <th className="px-3 py-3">Subcounty</th>
+              <th className="px-3 py-3">Ward</th>
               <th className="px-3 py-3">Date Created</th>
+              <th className="px-3 py-3">Date Updated</th>
+              <th className="px-3 py-3">Status</th>
             </tr>
           </thead>
           <tbody>
             {tableData.length > 0 ? (
               tableData.map((item) => (
                 <tr
-                  key={item.productId}
+                  key={item.marketId}
                   className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                 >
                   <td
                     scope="row"
                     className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
                   >
-                    {item.productId}
+                    {item.marketId}
                   </td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.product)}
-                  </td>
-                  <td className="px-3 py-2 truncate"> {item.quantityInKgs}</td>
-                  <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.market)}
+                    {capitalizeFirstLetter(item.title)}
                   </td>
                   <td className="px-3 py-2 truncate">
                     {capitalizeFirstLetter(item.county)}
                   </td>
                   <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.fscName)}
+                    {capitalizeFirstLetter(item.subCounty)}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.farmPrice}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
-                    {item.retailPrice}
+                  <td className="px-3 py-2 truncate">
+                    {capitalizeFirstLetter(item.ward)}
                   </td>
-                  <td className="px-3 py-2 truncate"> {item.wholesalePrice}</td>
-                  <td className="px-3 py-2 truncate"> {item.createdAt}</td>
+                  <td className="px-3 py-2 truncate">{item.createdAt}</td>
+                  <td className="px-3 py-2 truncate">{item.updatedAt}</td>
+                  <td className="px-3 py-2 truncate">Active</td>
                 </tr>
               ))
             ) : (
@@ -82,4 +76,4 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
   );
 };
 
-export default AveragePricesTable;
+export default MarketsTable;
