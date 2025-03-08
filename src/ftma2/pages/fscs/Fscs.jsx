@@ -8,6 +8,8 @@ import { getDataForDownload, getLocations } from "../../service/FscsService";
 import customSelectStyles3 from "../../../styles/customSelectStyles3";
 import Pagination from "./Pagination";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";
+import AddFscModal from "./AddFscModal"; // Import the modal component
+import { toast } from "react-toastify";
 
 const Fscs = () => {
   const [counties, setCounties] = useState([]);
@@ -25,7 +27,45 @@ const Fscs = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [totalFscs, setTotalFscs] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const recordsPerPage = 10;
+
+  const handleCreateUser = async (formData, resetForm) => {
+    try {
+      const response = await axios.post(`${BASE_REST_API_URL}/user/create`, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        msisdn: formData.msisdn,
+        username: formData.msisdn, // Assuming username is the same as msisdn
+        gender: formData.gender.toUpperCase(), // Ensure gender is in uppercase
+        roleId: parseInt(formData.roleId, 10), // Convert roleId to a number
+        fsc: formData.roleId === "4", // Set fsc to true if roleId is 4
+        marketId: formData.roleId === "4" ? parseInt(formData.marketId, 10) : 0, // Set marketId only if fsc is true
+      });
+
+      toast.success("User created successfully");
+      resetForm();
+      await fetchData();
+      return true;
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.parameterViolations
+      ) {
+        // Extract the first parameter violation message
+        const violationMessage =
+          error.response.data.parameterViolations[0].message;
+        toast.error(violationMessage);
+      } else {
+        toast.error("Failed to create user");
+        console.log(error);
+      }
+      console.error("Error creating user:", error);
+    } finally {
+    }
+  };
 
   // Fetch initial counties data
   useEffect(() => {
@@ -40,34 +80,7 @@ const Fscs = () => {
     fetchCounties();
   }, []);
 
-  // Fetch data whenever any filter changes
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        let url =
-          BASE_REST_API_URL +
-          `/fsc/list?pageNumber=${
-            currentPage + 1
-          }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
-        if (selectedCounty) url += `&countyIds=${selectedCounty.value}`;
-        if (selectedSubcounty)
-          url += `&subCountyIds=${selectedSubcounty.value}`;
-        if (selectedWard) url += `&wardIds=${selectedWard.value}`;
-
-        const response = await axios.get(url);
-        setTableData(response.data.data.fsc);
-        setTotalPages(
-          Math.ceil(response.data.data.totalRecords / recordsPerPage)
-        );
-        setTotalFscs(response.data.data.totalRecords);
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchData();
   }, [
     currentPage,
@@ -77,6 +90,33 @@ const Fscs = () => {
     selectedSubcounty,
     selectedWard,
   ]);
+
+  // Fetch data whenever any filter changes
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      let url =
+        BASE_REST_API_URL +
+        `/fsc/list?pageNumber=${
+          currentPage + 1
+        }&pageSize=${recordsPerPage}&startDate=${startDate}&endDate=${endDate}`;
+      if (selectedCounty) url += `&countyIds=${selectedCounty.value}`;
+      if (selectedSubcounty) url += `&subCountyIds=${selectedSubcounty.value}`;
+      if (selectedWard) url += `&wardIds=${selectedWard.value}`;
+
+      const response = await axios.get(url);
+      setTableData(response.data.data.fsc);
+      setTotalPages(
+        Math.ceil(response.data.data.totalRecords / recordsPerPage)
+      );
+      setTotalFscs(response.data.data.totalRecords);
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // fetch all data for download
   const fetchAllData = async () => {
     try {
@@ -233,7 +273,10 @@ const Fscs = () => {
             <span className="text-sm font-medium">Export CSV</span>
           </button>
 
-          <button className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors shadow-sm"
+          >
             <Plus className="w-4 h-4" />
             <span className="text-sm font-medium">Create FSC</span>
           </button>
@@ -284,6 +327,14 @@ const Fscs = () => {
           recordsPerPage={recordsPerPage}
         />
       )}
+
+      {/* Add FSC Modal */}
+      <AddFscModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateUser}
+        counties={counties}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import { FaEllipsis } from "react-icons/fa6";
+import { FaEdit, FaTrash } from "react-icons/fa"; // Import edit and delete icons
 
 const capitalizeFirstLetter = (str) => {
   if (!str) return str; // Handle empty or undefined strings
@@ -8,8 +8,19 @@ const capitalizeFirstLetter = (str) => {
 };
 
 const FscTable = ({ isLoading, filteredData }) => {
+  // Placeholder functions for edit and delete actions
+  const handleEdit = (item) => {
+    console.log("Edit item:", item);
+    // Implement your edit logic here
+  };
+
+  const handleDelete = (item) => {
+    console.log("Delete item:", item);
+    // Implement your delete logic here
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm  border border-gray-100">
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <ClipLoader color="#D97706" size={50} />
@@ -60,12 +71,20 @@ const FscTable = ({ isLoading, filteredData }) => {
                       {item.marketPointsBalance}
                     </td>
                     <td className="px-3 py-2 truncate"> {item.createdAt}</td>
-                    <td className="px-3 py-2 flex justify-center items-center">
+                    <td className="px-3 py-2 flex justify-center items-center space-x-2">
                       <button
-                        className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                        aria-label="More actions"
+                        className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200"
+                        aria-label="Edit"
+                        onClick={() => handleEdit(item)}
                       >
-                        <FaEllipsis />
+                        <FaEdit />
+                      </button>
+                      <button
+                        className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200"
+                        aria-label="Delete"
+                        onClick={() => handleDelete(item)}
+                      >
+                        <FaTrash />
                       </button>
                     </td>
                   </tr>

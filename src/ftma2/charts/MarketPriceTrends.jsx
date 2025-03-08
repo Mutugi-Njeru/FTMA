@@ -13,361 +13,222 @@ import {
 import { format } from "date-fns";
 import customSelectStyles from "../../styles/customSelectStyles";
 import { FiDownload } from "react-icons/fi";
+import { BASE_REST_API_URL } from "../service/CountyProductsService";
+import axios from "axios";
+import { getLocations } from "../service/FscsService";
 
-// Mock data remains the same
-const mockData = {
-  counties: ["Nairobi", "Mombasa", "Kisumu"],
-  markets: {
-    Nairobi: ["Wakulima", "Gikomba", "Westlands"],
-    Mombasa: ["Kongowea", "Marikiti", "Mwembe Tayari"],
-    Kisumu: ["Kibuye", "Jubilee", "Kondele"],
-  },
-  products: ["Maize", "Potatoes", "Beans"],
-  priceData: [
-    // All the existing mock data remains the same
-    // Maize data
-    {
-      date: "2024-01-01",
-      product: "Maize",
-      market: "Wakulima",
-      farmPrice: 30,
-      retailPrice: 45,
-      marketPrice: 40,
-    },
-    {
-      date: "2024-01-02",
-      product: "Maize",
-      market: "Wakulima",
-      farmPrice: 32,
-      retailPrice: 47,
-      marketPrice: 42,
-    },
-    {
-      date: "2024-01-03",
-      product: "Maize",
-      market: "Wakulima",
-      farmPrice: 31,
-      retailPrice: 46,
-      marketPrice: 41,
-    },
-    {
-      date: "2024-01-04",
-      product: "Maize",
-      market: "Wakulima",
-      farmPrice: 33,
-      retailPrice: 48,
-      marketPrice: 43,
-    },
-    {
-      date: "2024-01-05",
-      product: "Maize",
-      market: "Wakulima",
-      farmPrice: 34,
-      retailPrice: 49,
-      marketPrice: 44,
-    },
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toLocaleDateString("en-CA"); // Ensures YYYY-MM-DD format in local time
+};
 
-    // Potatoes data
-    {
-      date: "2024-01-01",
-      product: "Potatoes",
-      market: "Wakulima",
-      farmPrice: 45,
-      retailPrice: 65,
-      marketPrice: 55,
-    },
-    {
-      date: "2024-01-02",
-      product: "Potatoes",
-      market: "Wakulima",
-      farmPrice: 47,
-      retailPrice: 67,
-      marketPrice: 57,
-    },
-    {
-      date: "2024-01-03",
-      product: "Potatoes",
-      market: "Wakulima",
-      farmPrice: 46,
-      retailPrice: 66,
-      marketPrice: 56,
-    },
-    {
-      date: "2024-01-04",
-      product: "Potatoes",
-      market: "Wakulima",
-      farmPrice: 48,
-      retailPrice: 68,
-      marketPrice: 58,
-    },
-    {
-      date: "2024-01-05",
-      product: "Potatoes",
-      market: "Wakulima",
-      farmPrice: 49,
-      retailPrice: 69,
-      marketPrice: 59,
-    },
+const CustomTooltip = ({ active, payload, label }) => {
+  if (active && payload && payload.length) {
+    // Ensure payload[0], payload[1], and payload[2] are defined
+    const farmPrice = payload[0] ? payload[0].value : "N/A";
+    const wholesalePrice = payload[1] ? payload[1].value : "N/A";
+    const retailPrice = payload[2] ? payload[2].value : "N/A";
 
-    // Beans data
-    {
-      date: "2024-01-01",
-      product: "Beans",
-      market: "Wakulima",
-      farmPrice: 80,
-      retailPrice: 100,
-      marketPrice: 90,
-    },
-    {
-      date: "2024-01-02",
-      product: "Beans",
-      market: "Wakulima",
-      farmPrice: 82,
-      retailPrice: 102,
-      marketPrice: 92,
-    },
-    {
-      date: "2024-01-03",
-      product: "Beans",
-      market: "Wakulima",
-      farmPrice: 81,
-      retailPrice: 101,
-      marketPrice: 91,
-    },
-    {
-      date: "2024-01-04",
-      product: "Beans",
-      market: "Wakulima",
-      farmPrice: 83,
-      retailPrice: 103,
-      marketPrice: 93,
-    },
-    {
-      date: "2024-01-05",
-      product: "Beans",
-      market: "Wakulima",
-      farmPrice: 84,
-      retailPrice: 104,
-      marketPrice: 94,
-    },
-
-    // Maize data for Gikomba
-    {
-      date: "2024-01-01",
-      product: "Maize",
-      market: "Gikomba",
-      farmPrice: 31,
-      retailPrice: 46,
-      marketPrice: 41,
-    },
-    {
-      date: "2024-01-02",
-      product: "Maize",
-      market: "Gikomba",
-      farmPrice: 33,
-      retailPrice: 48,
-      marketPrice: 43,
-    },
-    {
-      date: "2024-01-03",
-      product: "Maize",
-      market: "Gikomba",
-      farmPrice: 32,
-      retailPrice: 47,
-      marketPrice: 42,
-    },
-    {
-      date: "2024-01-04",
-      product: "Maize",
-      market: "Gikomba",
-      farmPrice: 34,
-      retailPrice: 49,
-      marketPrice: 44,
-    },
-    {
-      date: "2024-01-05",
-      product: "Maize",
-      market: "Gikomba",
-      farmPrice: 35,
-      retailPrice: 50,
-      marketPrice: 45,
-    },
-
-    // Kongowea market data
-    {
-      date: "2024-01-01",
-      product: "Maize",
-      market: "Kongowea",
-      farmPrice: 28,
-      retailPrice: 43,
-      marketPrice: 38,
-    },
-    {
-      date: "2024-01-02",
-      product: "Maize",
-      market: "Kongowea",
-      farmPrice: 29,
-      retailPrice: 44,
-      marketPrice: 39,
-    },
-    {
-      date: "2024-01-03",
-      product: "Maize",
-      market: "Kongowea",
-      farmPrice: 30,
-      retailPrice: 45,
-      marketPrice: 40,
-    },
-    {
-      date: "2024-01-04",
-      product: "Maize",
-      market: "Kongowea",
-      farmPrice: 31,
-      retailPrice: 46,
-      marketPrice: 41,
-    },
-    {
-      date: "2024-01-05",
-      product: "Maize",
-      market: "Kongowea",
-      farmPrice: 32,
-      retailPrice: 47,
-      marketPrice: 42,
-    },
-
-    // Kibuye market data
-    {
-      date: "2024-01-01",
-      product: "Potatoes",
-      market: "Kibuye",
-      farmPrice: 42,
-      retailPrice: 62,
-      marketPrice: 52,
-    },
-    {
-      date: "2024-01-02",
-      product: "Potatoes",
-      market: "Kibuye",
-      farmPrice: 43,
-      retailPrice: 63,
-      marketPrice: 53,
-    },
-    {
-      date: "2024-01-03",
-      product: "Potatoes",
-      market: "Kibuye",
-      farmPrice: 44,
-      retailPrice: 64,
-      marketPrice: 54,
-    },
-    {
-      date: "2024-01-04",
-      product: "Potatoes",
-      market: "Kibuye",
-      farmPrice: 45,
-      retailPrice: 65,
-      marketPrice: 55,
-    },
-    {
-      date: "2024-01-05",
-      product: "Potatoes",
-      market: "Kibuye",
-      farmPrice: 46,
-      retailPrice: 66,
-      marketPrice: 56,
-    },
-  ],
+    return (
+      <div className="bg-white p-3 border rounded-lg shadow-sm">
+        <p className="text-sm text-gray-700">{`Date: ${format(
+          new Date(label),
+          "MMM d, yyyy"
+        )}`}</p>
+        <p className="text-sm text-gray-700">{`Farm Price: ${farmPrice}`}</p>
+        <p className="text-sm text-gray-700">{`Wholesale Price: ${wholesalePrice}`}</p>
+        <p className="text-sm text-gray-700">{`Retail Price: ${retailPrice}`}</p>
+      </div>
+    );
+  }
+  return null;
 };
 
 function MarketPriceTrends() {
-  const [selectedCounty, setSelectedCounty] = useState("");
-  const [selectedMarket, setSelectedMarket] = useState("");
-  const [selectedProduct, setSelectedProduct] = useState("");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
+  const [startDate, setStartDate] = useState("2024-01-01");
+  const [endDate, setEndDate] = useState(getTodayDate());
+  const [counties, setCounties] = useState([]);
+  const [selectedCounty, setSelectedCounty] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [countyMarkets, setCountyMarkets] = useState([]);
+  const [countyProducts, setCountyProducts] = useState([]);
+  const [selectedMarket, setSelectedMarket] = useState(null);
+  const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch initial counties data
   useEffect(() => {
-    setSelectedMarket("");
+    const fetchCounties = async () => {
+      try {
+        const response = await getLocations();
+        setCounties(response.data.data.counties);
+
+        // Set default county to countyId 13
+        const defaultCounty = response.data.data.counties.find(
+          (county) => county.countyId === 13
+        );
+        if (defaultCounty) {
+          setSelectedCounty({
+            value: defaultCounty.countyId,
+            label: defaultCounty.countyName,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching counties:", err);
+      }
+    };
+    fetchCounties();
+  }, []);
+
+  // Fetch county markets when selectedCounty changes
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!selectedCounty) return; // Don't fetch if no county is selected
+
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/markets/list?pageNumber=1&pageSize=100000&startDate=${startDate}&endDate=${endDate}&countyIds=${selectedCounty.value}`;
+        const response = await axios.get(url);
+        setCountyMarkets(response.data.data.markets);
+        // Set default product to marketId 87
+        const defaultMarket = response.data.data.markets.find(
+          (market) => market.marketId === 87
+        );
+        if (defaultMarket) {
+          setSelectedMarket({
+            value: defaultMarket.marketId,
+            label: defaultMarket.title,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    fetchData();
   }, [selectedCounty]);
 
+  // Fetch countyProducts when selectedCounty and market changes
   useEffect(() => {
-    if (
-      selectedCounty &&
-      selectedMarket &&
-      selectedProduct &&
-      fromDate &&
-      toDate
-    ) {
-      const filtered = mockData.priceData.filter(
-        (item) =>
-          item.market === selectedMarket &&
-          item.product === selectedProduct &&
-          item.date >= fromDate &&
-          item.date <= toDate
-      );
-      setFilteredData(filtered);
-    }
-  }, [selectedCounty, selectedMarket, selectedProduct, fromDate, toDate]);
+    const fetchData = async () => {
+      if (!selectedCounty && !selectedMarket) return; // Don't fetch if no county and market is selected
 
-  const convertToCSV = (data) => {
-    const headers = [
-      "Date",
-      "Product",
-      "Market",
-      "Farm Price",
-      "Retail Price",
-      "Market Price",
-    ];
-    const rows = data.map((item) => [
-      item.date,
-      item.product,
-      item.market,
-      item.farmPrice,
-      item.retailPrice,
-      item.marketPrice,
-    ]);
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/county-products/list?countyIds=${selectedCounty.value}`;
+        const response = await axios.get(url);
+        setCountyProducts(response.data.data.countyProducts);
+        // Set default product to productId 84
+        const defaultProduct = response.data.data.countyProducts.find(
+          (product) => product.countyProductId === 84
+        );
+        if (defaultProduct) {
+          setSelectedProduct({
+            value: defaultProduct.countyProductId,
+            label: defaultProduct.product,
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
 
-    const csvContent = [
-      headers.join(","),
-      ...rows.map((row) => row.join(",")),
-    ].join("\n");
+    fetchData();
+  }, [selectedCounty]);
 
-    return csvContent;
+  // Fetch barchart data
+  useEffect(() => {
+    const fetchData = async () => {
+      // Ensure all required selections are present
+      if (!selectedCounty || !selectedProduct || !selectedMarket) return;
+
+      setIsLoading(true);
+      try {
+        let url =
+          BASE_REST_API_URL +
+          `/report/market-prices-trends?countyId=${selectedCounty.value}&countyProductId=${selectedProduct.value}&marketId=${selectedMarket.value}&startDate=${startDate}&endDate=${endDate}`;
+        const response = await axios.get(url);
+        if (response.data && response.data.success) {
+          setChartData(response.data.data.marketPricesTrends);
+        } else {
+          console.error("API returned an error:", response.data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [selectedCounty, selectedProduct, selectedMarket, startDate, endDate]);
+
+  const countyOptions = counties.map((county) => ({
+    value: county.countyId,
+    label: county.countyName,
+  }));
+
+  const marketOptions = countyMarkets.map((market) => ({
+    value: market.marketId,
+    label: market.title,
+  }));
+  const productOptions = countyProducts.map((product) => ({
+    value: product.countyProductId,
+    label: product.product,
+  }));
+
+  const handleCountyChange = (selectedOption) => {
+    setSelectedCounty(selectedOption);
+    setSelectedMarket(null);
+    setSelectedProduct(null);
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 rounded-lg shadow-lg border border-gray-200">
-          <p className="text-sm font-semibold text-gray-900">
-            {format(new Date(label), "MMM d, yyyy")}
-          </p>
-          {payload.map((entry, index) => (
-            <p key={index} className="text-sm" style={{ color: entry.color }}>
-              {entry.name}: KES {entry.value}
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
+  const handleMarketChange = (selectedOption) => {
+    setSelectedMarket(selectedOption);
+    setSelectedProduct(null);
+  };
+  const handleProductChange = (selectedOption) => {
+    setSelectedProduct(selectedOption);
   };
 
-  const countyOptions = mockData.counties.map((county) => ({
-    value: county,
-    label: county,
-  }));
-  const marketOptions = selectedCounty
-    ? mockData.markets[selectedCounty].map((market) => ({
-        value: market,
-        label: market,
-      }))
-    : [];
-  const productOptions = mockData.products.map((product) => ({
-    value: product,
-    label: product,
-  }));
+  const handleStartDateChange = (e) => {
+    const newStartDate = e.target.value;
+    if (newStartDate > endDate) {
+      alert("Start date cannot be greater than end date.");
+      return;
+    }
+    setStartDate(newStartDate);
+  };
+
+  const handleEndDateChange = (e) => {
+    const newEndDate = e.target.value;
+    if (newEndDate < startDate) {
+      alert("End date cannot be less than start date.");
+      return;
+    }
+    setEndDate(newEndDate);
+  };
+
+  const handleDownload = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      "Date,Farm Price,Market Price,Retail Price\n" +
+      chartData
+        .map(
+          (item) =>
+            `${item.priceDate},${item.farmPrice},${item.wholesalePrice},${item.retailPrice}`
+        )
+        .join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "market_price_trends.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
 
   return (
     <div className=" bg-slate-50">
@@ -382,69 +243,45 @@ function MarketPriceTrends() {
                 Last updated: {format(new Date(), "MMM d, yyyy")}
               </div>
             </div>
-            <div className="flex items-center space-x-3 ml-1">
+            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 ml-1">
               <input
                 type="date"
-                value={fromDate}
-                onChange={(e) => setFromDate(e.target.value)}
+                value={startDate}
+                onChange={handleStartDateChange}
                 className="border rounded-lg text-sm pl-1"
               />
               <input
                 type="date"
-                value={toDate}
-                onChange={(e) => setToDate(e.target.value)}
+                value={endDate}
+                onChange={handleEndDateChange}
                 className="border rounded-lg text-sm pl-1"
               />
               <Select
                 options={countyOptions}
-                value={countyOptions.find(
-                  (option) => option.value === selectedCounty
-                )}
-                onChange={(selectedOption) =>
-                  setSelectedCounty(selectedOption.value)
-                }
+                value={selectedCounty}
+                onChange={handleCountyChange}
                 styles={customSelectStyles}
                 className="w-28 text-xs"
                 placeholder="County"
               />
               <Select
                 options={marketOptions}
-                value={marketOptions.find(
-                  (option) => option.value === selectedMarket
-                )}
-                onChange={(selectedOption) =>
-                  setSelectedMarket(selectedOption.value)
-                }
+                value={selectedMarket}
+                onChange={handleMarketChange}
                 styles={customSelectStyles}
                 className="w-28 text-xs"
-                isDisabled={!selectedCounty} // Disable when no county is selected
                 placeholder="Market"
               />
               <Select
                 options={productOptions}
-                value={productOptions.find(
-                  (option) => option.value === selectedProduct
-                )}
-                onChange={(selectedOption) =>
-                  setSelectedProduct(selectedOption.value)
-                }
+                value={selectedProduct}
+                onChange={handleProductChange}
                 styles={customSelectStyles}
                 className="w-32 text-xs"
-                isDisabled={!selectedMarket} // Disable if no market is selected
                 placeholder="Product"
               />
               <button
-                onClick={() => {
-                  const csvData = convertToCSV(filteredData);
-                  const blob = new Blob([csvData], { type: "text/csv" });
-                  const url = window.URL.createObjectURL(blob);
-                  const a = document.createElement("a");
-                  a.href = url;
-                  a.download = "selected_data.csv";
-                  a.click();
-                  window.URL.revokeObjectURL(url);
-                }}
-                disabled={filteredData.length === 0}
+                onClick={handleDownload}
                 className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed"
               >
                 <FiDownload size={22} />
@@ -452,12 +289,16 @@ function MarketPriceTrends() {
             </div>
           </div>
 
-          {filteredData.length > 0 ? (
+          {isLoading ? (
+            <div className="text-center py-20">
+              <div className="text-gray-400 mb-2">Loading...</div>
+            </div>
+          ) : chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={filteredData}>
+              <LineChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
                 <XAxis
-                  dataKey="date"
+                  dataKey="priceDate"
                   tickFormatter={(date) => format(new Date(date), "MMM d")}
                   stroke="#6b7280"
                 />
@@ -474,7 +315,7 @@ function MarketPriceTrends() {
                 />
                 <Line
                   type="monotone"
-                  dataKey="marketPrice"
+                  dataKey="wholesalePrice"
                   stroke="#bab600"
                   strokeWidth={2}
                   dot={{ fill: "#bab600" }}
