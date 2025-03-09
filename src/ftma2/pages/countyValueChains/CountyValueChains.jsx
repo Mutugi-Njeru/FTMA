@@ -7,10 +7,12 @@ import {
   getCountyProducts,
 } from "../../service/CountyProductsService";
 import axios from "axios";
-import ReactPaginate from "react-paginate";
 import { Download, Plus, SlidersHorizontal } from "lucide-react";
 import CountyValueChainsHeader from "./CountyValueChainsHeader";
 import CountyValueChainsFilters from "./CountyValueChainsFilters";
+import Pagination from "./Pagination"; // Import the new Pagination component
+import CountyValueChainsTable from "./CountyValueChainsTable";
+import AddCountyChainModal from "./AddCountyChainModal";
 
 const CountyValueChains = () => {
   const [counties, setCounties] = useState([]);
@@ -23,6 +25,8 @@ const CountyValueChains = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [valueChains, setValueChains] = useState([]);
 
   // Fetch initial counties data
   useEffect(() => {
@@ -35,6 +39,21 @@ const CountyValueChains = () => {
       }
     };
     fetchCounties();
+  }, []);
+
+  // Fetch value chains data
+  useEffect(() => {
+    const fetchValueChains = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_REST_API_URL}/products/list?pageNumber=1&pageSize=1000&startDate=2024-01-01&endDate=2025-12-12`
+        );
+        setValueChains(response.data.data.products);
+      } catch (err) {
+        console.error("Error fetching value chains:", err);
+      }
+    };
+    fetchValueChains();
   }, []);
 
   const countyOptions = counties.map((county) => ({
@@ -102,7 +121,10 @@ const CountyValueChains = () => {
     <div className="px-2 py-2">
       <CountyValueChainsHeader />
       <div className="flex justify-between mb-2">
-        <button className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+        <button
+          className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm"
+          onClick={() => setIsModalOpen(true)}
+        >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">Add Chain</span>
         </button>
@@ -150,89 +172,27 @@ const CountyValueChains = () => {
       ) : (
         <>
           {/* Table */}
-          <div className="border rounded-lg mt-6 p-1 bg-white">
-            <table className="min-w-full divide-y divide-gray-200 overflow-hidden">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    Product ID
-                  </th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    Name
-                  </th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    County
-                  </th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    Date Created
-                  </th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    Date Updated
-                  </th>
-                  <th className="px-2 py-2 text-left text-xs font-medium text-black uppercase tracking-wider">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((item) => (
-                  <tr key={item.countyProductId}>
-                    <td className="px-2 py-2 text-sm text-gray-500">
-                      {item.countyProductId}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-500">
-                      {item.product}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-500">
-                      {item.county}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-500">
-                      {item.createdAt}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-500">
-                      {item.updatedAt}
-                    </td>
-                    <td className="px-2 py-2 text-sm text-gray-500">Active</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <CountyValueChainsTable data={data} />
 
           {/* Pagination */}
           {pageCount > 1 && (
-            <div className="flex flex-col items-center mt-4">
-              <ReactPaginate
-                previousLabel={"Previous"}
-                nextLabel={"Next"}
-                breakLabel={"..."}
-                pageCount={pageCount}
-                marginPagesDisplayed={1} // Show dots after first and before last page
-                pageRangeDisplayed={3} // Number of pages to display around the current page
-                onPageChange={handlePageClick}
-                containerClassName={
-                  "flex justify-center items-center space-x-2"
-                }
-                pageClassName={"px-3 py-1 border border-gray-300 rounded-md"}
-                pageLinkClassName={"text-sm text-gray-700"}
-                previousClassName={`px-3 py-1 border border-gray-300 rounded-md ${
-                  currentPage === 0 ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                nextClassName={`px-3 py-1 border border-gray-300 rounded-md ${
-                  currentPage + 1 === pageCount
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
-                previousLinkClassName={"text-sm text-gray-700"}
-                nextLinkClassName={"text-sm text-gray-700"}
-                activeClassName={"bg-blue-500 text-white"}
-                disabledClassName={"opacity-50 cursor-not-allowed"}
-                forcePage={currentPage}
-              />
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={pageCount}
+              handlePageChange={handlePageClick}
+              filteredData={data}
+              recordsPerPage={10}
+            />
           )}
         </>
       )}
+      {/* Add Chain Modal */}
+      <AddCountyChainModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        counties={counties}
+        valueChains={valueChains}
+      />
     </div>
   );
 };

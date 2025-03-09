@@ -10,6 +10,7 @@ import Pagination from "./Pagination";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 import AddFscModal from "./AddFscModal"; // Import the modal component
 import { toast } from "react-toastify";
+import FscEditUser from "./FscEditUser";
 
 const Fscs = () => {
   const [counties, setCounties] = useState([]);
@@ -27,7 +28,10 @@ const Fscs = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [totalFscs, setTotalFscs] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for add modal visibility
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal visibility
+  const [selectedUser, setSelectedUser] = useState(null);
+
   const recordsPerPage = 10;
 
   const handleCreateUser = async (formData, resetForm) => {
@@ -67,7 +71,6 @@ const Fscs = () => {
     }
   };
 
-  // Fetch initial counties data
   useEffect(() => {
     const fetchCounties = async () => {
       try {
@@ -91,7 +94,6 @@ const Fscs = () => {
     selectedWard,
   ]);
 
-  // Fetch data whenever any filter changes
   const fetchData = async () => {
     setIsLoading(true);
     try {
@@ -117,7 +119,6 @@ const Fscs = () => {
     }
   };
 
-  // fetch all data for download
   const fetchAllData = async () => {
     try {
       const response = await getDataForDownload();
@@ -128,7 +129,6 @@ const Fscs = () => {
     }
   };
 
-  // Update sub-counties when county is selected
   useEffect(() => {
     if (selectedCounty) {
       const county = counties.find((c) => c.countyId === selectedCounty.value);
@@ -138,7 +138,6 @@ const Fscs = () => {
     }
   }, [selectedCounty, counties]);
 
-  // Update wards when sub-county is selected
   useEffect(() => {
     if (selectedSubcounty) {
       const subCounty = subCounties.find(
@@ -240,6 +239,40 @@ const Fscs = () => {
       item.market.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleEdit = async (item) => {
+    setSelectedUser(item);
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(!isEditModalOpen);
+    setSelectedUser(null);
+  };
+  const handleDelete = async (userId) => {
+    try {
+      const response = await axios.delete(
+        `${BASE_REST_API_URL}/user/${userId}/hard-delete`
+      );
+
+      if (response.status === 200) {
+        toast.success("User deleted successfully");
+        await fetchData();
+      }
+    } catch (error) {
+      console.error("Error deleting user:", error);
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to delete user");
+      }
+    }
+  };
+
   return (
     <div className="px-2 py-2">
       {/* Header */}
@@ -315,7 +348,12 @@ const Fscs = () => {
       />
 
       {/* Table placeholder */}
-      <FscTable isLoading={isLoading} filteredData={filteredData} />
+      <FscTable
+        isLoading={isLoading}
+        filteredData={filteredData}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
       {/* Pagination */}
       {filteredData.length > 0 && (
@@ -335,6 +373,13 @@ const Fscs = () => {
         onSubmit={handleCreateUser}
         counties={counties}
       />
+      {isEditModalOpen && (
+        <FscEditUser
+          onClose={handleCloseEditModal}
+          item={selectedUser}
+          refreshTable={fetchData}
+        />
+      )}
     </div>
   );
 };

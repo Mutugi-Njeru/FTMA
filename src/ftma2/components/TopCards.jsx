@@ -119,6 +119,31 @@ const TopCards = () => {
         </motion.div>
       ))}
     </div>
+    // <div className="flex flex-row mt-3 ml-2 h-24">
+    //   {cardItems.map((item, index) => (
+    //     <motion.div
+    //       key={index}
+    //       className="w-1/6 border rounded-lg mr-2 bg-snowDrift shadow-md flex flex-col justify-center p-4"
+    //       initial={{ opacity: 0, y: 20 }}
+    //       animate={{ opacity: 1, y: 0 }}
+    //       transition={{ duration: 0.3, delay: index * 0.1 }}
+    //       whileHover={{
+    //         scale: 1.05,
+    //         boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
+    //       }}
+    //     >
+    //       <div className="flex items-center">
+    //         <div className="bg-butterScotch p-2 rounded-full">{item.icon}</div>
+    //         <p className="text-xs text-taupe ml-3 hover:text-taupe cursor-pointer">
+    //           {item.label}
+    //         </p>
+    //       </div>
+    //       <p className="text-sm text-center text-mediumElectricBlue font-bold">
+    //         {item.amount}
+    //       </p>
+    //     </motion.div>
+    //   ))}
+    // </div>
   );
 };
 

@@ -21,6 +21,10 @@ import {
 } from "lucide-react";
 import ValueChainFilters from "./ValueChainFilters";
 import ValueChainsHeader from "./ValueChainsHeader";
+import ValueChainsTable from "./ValueChainsTable";
+import { BASE_REST_API_URL } from "../../service/CountyProductsService";
+import AddValueChainModal from "./AddValueChainModal"; // Import the modal component
+import { toast } from "react-toastify";
 
 const ValueChains = () => {
   const [data, setData] = useState([]);
@@ -33,6 +37,7 @@ const ValueChains = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const pageSize = 10;
 
   const fetchData = async () => {
@@ -41,7 +46,7 @@ const ValueChains = () => {
 
     try {
       const response = await axios.get(
-        `https://ftma.egroup.co.ke/market-information/v1/api/products/list?pageNumber=${pageNumber}&pageSize=${pageSize}&startDate=${startDate}&endDate=${endDate}`
+        `${BASE_REST_API_URL}/products/list?pageNumber=${pageNumber}&pageSize=${pageSize}&startDate=${startDate}&endDate=${endDate}`
       );
       setData(response.data.data.products);
       setPageCount(Math.ceil(response.data.data.totalCount / pageSize));
@@ -63,7 +68,6 @@ const ValueChains = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Filter locally since the API doesn't support search
     fetchData();
   };
 
@@ -93,7 +97,7 @@ const ValueChains = () => {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       default:
-        return "bg-gray-100 text-gray-800";
+        return "bg-green-100 text-gray-800";
     }
   };
 
@@ -161,9 +165,17 @@ const ValueChains = () => {
     document.body.removeChild(link);
   };
 
-  const handleAdd = () => {
-    // Implement the add functionality here
-    console.log("Add button clicked");
+  const handleAddValueChain = (commodityName) => {
+    axios
+      .post(`${BASE_REST_API_URL}/product/create`, { title: commodityName })
+      .then((response) => {
+        toast.success("product added sucessfully");
+        fetchData(); // Refresh the data
+      })
+      .catch((error) => {
+        toast.error("error adding product");
+        console.error("Error adding value chain:", error);
+      });
   };
 
   return (
@@ -171,7 +183,10 @@ const ValueChains = () => {
       {/* Header */}
       <ValueChainsHeader />
       <div className="flex justify-between mb-2">
-        <button className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+        <button
+          className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm"
+          onClick={() => setIsModalOpen(true)} // Open the modal
+        >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">Add Chain</span>
         </button>
@@ -218,145 +233,12 @@ const ValueChains = () => {
       )}
 
       {/* Table */}
-      <div className="mt-3 rounded-xl p-1 bg-white">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr className="rounded-t-lg">
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("productId")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>ID</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("productName")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Name</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("createdBy")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Created By</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("createdAt")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Created At</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("updatedAt")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Updated At</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("updatedBy")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Updated By</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                onClick={() => requestSort("status")}
-              >
-                <div className="flex items-center space-x-1">
-                  <span>Status</span>
-                  <ArrowUpDown className="h-4 w-4" />
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {loading ? (
-              <tr>
-                <td colSpan="7" className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <Loader2 className="h-8 w-8 text-amber-600 animate-spin mb-2" />
-                    <p className="text-gray-500">Loading value chains...</p>
-                  </div>
-                </td>
-              </tr>
-            ) : filteredData.length === 0 ? (
-              <tr>
-                <td colSpan="7" className="px-6 py-12 text-center">
-                  <div className="flex flex-col items-center justify-center">
-                    <AlertCircle className="h-8 w-8 text-gray-400 mb-2" />
-                    <p className="text-gray-500 font-medium">
-                      No value chains found
-                    </p>
-                    <p className="text-gray-400 text-sm mt-1">
-                      Try adjusting your search or filters
-                    </p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              filteredData.map((item) => (
-                <tr
-                  key={item.productId}
-                  className="hover:bg-gray-50 transition-colors"
-                >
-                  <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
-                    {item.productId}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-gray-700">
-                    {item.productName}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                    {item.createdBy || "N/A"}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(item.createdAt)}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(item.createdAt)}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
-                    {item.updatedBy || "N/A"}
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap">
-                    <span
-                      className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(
-                        item.status
-                      )}`}
-                    >
-                      {item.status || "Unknown"}
-                    </span>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <ValueChainsTable
+        filteredData={filteredData}
+        loading={loading}
+        formatDate={formatDate}
+        getStatusBadgeClass={getStatusBadgeClass}
+      />
 
       {/* Pagination */}
       {filteredData.length > 0 && (
@@ -395,9 +277,7 @@ const ValueChains = () => {
               pageClassName={
                 "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               }
-              activeClassName={
-                "z-10 bg-green-50 border-amber-600 text-blue-600"
-              }
+              activeClassName={"z-10 border-amber-600 text-amber-500"}
               previousClassName={
                 "relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               }
@@ -412,6 +292,13 @@ const ValueChains = () => {
           </div>
         </div>
       )}
+
+      {/* Add Value Chain Modal */}
+      <AddValueChainModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleAddValueChain}
+      />
     </div>
   );
 };

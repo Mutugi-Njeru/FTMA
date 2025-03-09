@@ -9,8 +9,16 @@ const ValueChainPieChart = () => {
     datasets: [
       {
         data: [5, 12, 10],
-        backgroundColor: ["#4CAF50", "#FF9800", "#2196F3"], // Green, Orange, Blue
-        hoverBackgroundColor: ["#388E3C", "#F57C00", "#1976D2"], // Darker Green, Darker Orange, Darker Blue
+        backgroundColor: [
+          "#A19E3B", // lemonGinger for Approved
+          "#413324", // taupe for Rejected
+          "#94C9E2", // skyBlue for Waiting
+        ],
+        hoverBackgroundColor: [
+          "#C3B00A", // brownYellow (darker lemonGinger) for Approved
+          "#FCB040", // butterScotch (darker taupe) for Rejected
+          "#00599A", // mediumElectricBlue (darker skyBlue) for Waiting
+        ],
       },
     ],
   };
@@ -26,7 +34,7 @@ const ValueChainPieChart = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col items-center ">
+    <div className="w-full h-full flex flex-col items-center">
       <h3 className="text-lg font-semibold mb-4 text-center">
         Value Chain Prices
       </h3>
@@ -35,15 +43,15 @@ const ValueChainPieChart = () => {
       </div>
       <div className="flex space-x-2 text-sm font-medium mt-8">
         <span className="flex items-center">
-          <span className="w-3 h-3 bg-[#4CAF50] inline-block rounded-full mr-1"></span>
+          <span className="w-3 h-3 bg-[#A19E3B] inline-block rounded-full mr-1"></span>
           Approved
         </span>
         <span className="flex items-center">
-          <span className="w-3 h-3 bg-[#FF9800] inline-block rounded-full mr-1"></span>
+          <span className="w-3 h-3 bg-[#413324] inline-block rounded-full mr-1"></span>
           Rejected
         </span>
         <span className="flex items-center">
-          <span className="w-3 h-3 bg-[#2196F3] inline-block rounded-full mr-1"></span>
+          <span className="w-3 h-3 bg-[#94C9E2] inline-block rounded-full mr-1"></span>
           Waiting
         </span>
       </div>

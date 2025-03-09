@@ -1,22 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 import { FaEdit, FaTrash } from "react-icons/fa"; // Import edit and delete icons
+import DeleteConfirmationModal from "./DeleteConfirmationModal"; // Import the modal component
 
 const capitalizeFirstLetter = (str) => {
   if (!str) return str; // Handle empty or undefined strings
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-const FscTable = ({ isLoading, filteredData }) => {
-  // Placeholder functions for edit and delete actions
-  const handleEdit = (item) => {
-    console.log("Edit item:", item);
-    // Implement your edit logic here
+const FscTable = ({ isLoading, filteredData, onEdit, onDelete }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState(null);
+
+  const handleDeleteClick = (item) => {
+    setItemToDelete(item);
+    setIsModalOpen(true);
   };
 
-  const handleDelete = (item) => {
-    console.log("Delete item:", item);
-    // Implement your delete logic here
+  const handleConfirmDelete = (userId) => {
+    onDelete(itemToDelete.userId);
+    setIsModalOpen(false);
+    setItemToDelete(null);
+  };
+
+  const handleCancelDelete = () => {
+    setIsModalOpen(false);
+    setItemToDelete(null);
   };
 
   return (
@@ -75,14 +84,14 @@ const FscTable = ({ isLoading, filteredData }) => {
                       <button
                         className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-200"
                         aria-label="Edit"
-                        onClick={() => handleEdit(item)}
+                        onClick={() => onEdit(item)}
                       >
                         <FaEdit />
                       </button>
                       <button
                         className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-200"
                         aria-label="Delete"
-                        onClick={() => handleDelete(item)}
+                        onClick={() => handleDeleteClick(item)}
                       >
                         <FaTrash />
                       </button>
@@ -103,6 +112,13 @@ const FscTable = ({ isLoading, filteredData }) => {
           </table>
         </div>
       )}
+
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        item={itemToDelete}
+      />
     </div>
   );
 };

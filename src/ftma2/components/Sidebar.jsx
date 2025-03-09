@@ -163,6 +163,93 @@ const Sidebar = () => {
         <span className="text-sm">admin@gmail.com</span>
       </div>
     </div>
+    // <div className="fixed top-0 left-0 h-screen w-48 rounded-tl-lg rounded-bl-lg flex flex-col justify-between bg-iceberg shadow-lg">
+    //   <div className="mt-4 ml-3">
+    //     <p className="text-center font-bold text-xl text-mediumElectricBlue">
+    //       MIS
+    //     </p>
+    //     <hr className="border-t border-taupe my-3" />
+    //   </div>
+    //   <div className="flex-grow mx-3 flex flex-col">
+    //     <ul className="pt-2 space-y-1">
+    //       {menuItems.map((item, index) => (
+    //         <li key={index}>
+    //           <div
+    //             className={`flex items-center justify-between gap-x-4 cursor-pointer p-2 rounded-md transition-all duration-300 ${
+    //               location.pathname === item.path
+    //                 ? "bg-mediumElectricBlue text-white"
+    //                 : "hover:bg-lemonGinger hover:text-taupe text-taupe"
+    //             }`}
+    //             onClick={() =>
+    //               item.hasDropdown
+    //                 ? toggleValueChainsDropdown()
+    //                 : navigate(item.path)
+    //             }
+    //           >
+    //             <div className="flex items-center gap-x-4 text-sm">
+    //               <span>{item.icon}</span>
+    //               <span>{item.label}</span>
+    //             </div>
+    //             {item.hasDropdown && (
+    //               <span>
+    //                 {isValueChainsDropdownOpen ? (
+    //                   <MdExpandLess size={16} />
+    //                 ) : (
+    //                   <MdExpandMore size={16} />
+    //                 )}
+    //               </span>
+    //             )}
+    //           </div>
+    //           {item.label === "Value Chains" && isValueChainsDropdownOpen && (
+    //             <ul className="ml-6 mt-1 space-y-1 text-sm text-taupe transition-all duration-300">
+    //               {item.dropdownItems.map((subItem, subIndex) => (
+    //                 <li
+    //                   key={subIndex}
+    //                   className={`flex items-center gap-x-2 cursor-pointer p-2 rounded-md transition-all duration-300 ${
+    //                     location.pathname === subItem.path
+    //                       ? "bg-mediumElectricBlue text-white"
+    //                       : "hover:bg-lemonGinger hover:text-taupe"
+    //                   }`}
+    //                   onClick={() => navigate(subItem.path)}
+    //                 >
+    //                   <span>{subItem.icon}</span>
+    //                   <span>{subItem.label}</span>
+    //                 </li>
+    //               ))}
+    //             </ul>
+    //           )}
+    //         </li>
+    //       ))}
+    //     </ul>
+    //   </div>
+    //   <div className="text-sm text-taupe p-3">
+    //     <hr className="border-t border-taupe my-2" />
+    //     <ul className="pt-2 space-y-1">
+    //       <li
+    //         onClick={() => navigate("/settings")}
+    //         className={`flex items-center gap-x-4 cursor-pointer p-2 rounded-md transition-all duration-300 ${
+    //           location.pathname === "/settings"
+    //             ? "bg-mediumElectricBlue text-white"
+    //             : "hover:bg-lemonGinger hover:text-taupe"
+    //         }`}
+    //       >
+    //         <MdSettings size={16} />
+    //         <span>Settings</span>
+    //       </li>
+    //       <li
+    //         onClick={() => navigate("/")}
+    //         className="flex items-center gap-x-4 cursor-pointer p-2 rounded-md hover:bg-lemonGinger hover:text-taupe transition-all duration-300"
+    //       >
+    //         <MdLogout size={16} />
+    //         <span>Logout</span>
+    //       </li>
+    //     </ul>
+    //   </div>
+    //   <div className="flex items-center gap-x-2 p-3 text-taupe rounded-bl-lg">
+    //     <FaUserCircle size={22} />
+    //     <span className="text-sm">admin@gmail.com</span>
+    //   </div>
+    // </div>
   );
 };
 

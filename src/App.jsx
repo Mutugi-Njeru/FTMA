@@ -9,7 +9,6 @@ import Login from "./ftma2/pages/Login";
 import { ToastContainer } from "react-toastify";
 import Fscs from "./ftma2/pages/fscs/Fscs";
 import ValueChains from "./ftma2/pages/valueChains/ValueChains";
-import CountyValueChains from "./ftma2/pages/valueChains/CountyValueChains";
 import MarketPrices from "./ftma2/pages/marketPrices/MarketPrices";
 import PricePerKg from "./ftma2/pages/pricePerKg/PricePerKg";
 import AveragePrices from "./ftma2/pages/averagePrices/AveragePrices";
@@ -17,6 +16,7 @@ import PriceRanges from "./ftma2/pages/priceRanges/PriceRanges";
 import MarketPoints from "./ftma2/pages/marketPoints/MarketPoints";
 import Markets from "./ftma2/pages/markets/Markets";
 import Users from "./ftma2/pages/users/Users";
+import CountyValueChains from "./ftma2/pages/countyValueChains/CountyValueChains";
 
 function App() {
   return (

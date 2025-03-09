@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GiCorn } from "react-icons/gi";
 import { FaEllipsis } from "react-icons/fa6";
-import { Download, Plus, SlidersHorizontal } from "lucide-react";
+import { Download, Plus, SlidersHorizontal, X } from "lucide-react";
 import MarketsFilters from "./MarketsFilters";
 import MarketsHeader from "./MarketsHeader";
 import { getLocations } from "../../service/FscsService";
@@ -9,6 +9,8 @@ import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 import axios from "axios";
 import MarketsTable from "./MarketsTable";
 import Pagination from "./Pagination";
+
+import CreateMarketModal from "./CreateMarketModal";
 
 const Markets = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -25,8 +27,11 @@ const Markets = () => {
   const [startDate, setStartDate] = useState("2024-01-01");
   const [endDate, setEndDate] = useState("2024-12-30");
   const [totalRecords, setTotalRecords] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [marketTitle, setMarketTitle] = useState("");
   const recordsPerPage = 15;
 
+  // Fetch counties on component mount
   useEffect(() => {
     const fetchCounties = async () => {
       try {
@@ -86,6 +91,7 @@ const Markets = () => {
       setSelectedWard(null);
     }
   }, [selectedCounty, counties]);
+
   // Update wards when sub-county is selected
   useEffect(() => {
     if (selectedSubcounty) {
@@ -100,14 +106,17 @@ const Markets = () => {
   const handlePageChange = (selectedItem) => {
     setCurrentPage(selectedItem.selected);
   };
+
   const countyOptions = counties.map((county) => ({
     value: county.countyId,
     label: county.countyName,
   }));
+
   const subcountyOptions = subCounties.map((subCounty) => ({
     value: subCounty.subCountyId,
     label: subCounty.subCountyName,
   }));
+
   const wardOptions = wards.map((ward) => ({
     value: ward.wardId,
     label: ward.wardName,
@@ -116,11 +125,29 @@ const Markets = () => {
   const handleCountyChange = (selectedOption) => {
     setSelectedCounty(selectedOption);
   };
+
   const handleSubcountyChange = (selectedOption) => {
     setSelectedSubcounty(selectedOption);
   };
+
   const handleWardChange = (selectedOption) => {
     setSelectedWard(selectedOption);
+  };
+
+  const handleAddMarket = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Handle form submission here
+    console.log({
+      county: selectedCounty,
+      subcounty: selectedSubcounty,
+      ward: selectedWard,
+      marketTitle,
+    });
+    setIsModalOpen(false);
   };
 
   return (
@@ -128,7 +155,10 @@ const Markets = () => {
       {/* header */}
       <MarketsHeader />
       <div className="flex justify-between mb-2">
-        <button className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+        <button
+          className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm"
+          onClick={handleAddMarket}
+        >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">Add Market</span>
         </button>
@@ -169,6 +199,7 @@ const Markets = () => {
 
       {/* table */}
       <MarketsTable isLoading={isLoading} tableData={tableData} />
+
       {/* Pagination */}
       {tableData.length > 0 && (
         <Pagination
@@ -179,6 +210,12 @@ const Markets = () => {
           recordsPerPage={recordsPerPage}
         />
       )}
+
+      {/* Modal */}
+      <CreateMarketModal
+        setIsModalOpen={setIsModalOpen}
+        isModalOpen={isModalOpen}
+      />
     </div>
   );
 };

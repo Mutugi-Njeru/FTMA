@@ -7,6 +7,7 @@ import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 import axios from "axios";
 import PriceRangesTable from "./PriceRangesTable";
 import Pagination from "./Pagination";
+import AddPriceRangeModal from "./AddPriceRangeModal";
 
 const PriceRanges = () => {
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
@@ -23,6 +24,8 @@ const PriceRanges = () => {
   const [startDate, setStartDate] = useState("2023-01-01");
   const [endDate, setEndDate] = useState("2025-09-01");
   const [totalRecords, setTotalRecords] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+
   const recordsPerPage = 15;
 
   useEffect(() => {
@@ -126,7 +129,10 @@ const PriceRanges = () => {
       <PriceRangeHeader />
 
       <div className="flex justify-between mb-2">
-        <button className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm">
+        <button
+          className="flex items-center gap-2 px-4 py-2 border bg-white text-black rounded-lg hover:bg-amber-700 transition-colors shadow-sm"
+          onClick={() => setIsModalOpen(true)} // Open modal on click
+        >
           <Plus className="w-4 h-4" />
           <span className="text-sm font-medium">Add Price</span>
         </button>
@@ -177,6 +183,13 @@ const PriceRanges = () => {
           recordsPerPage={recordsPerPage}
         />
       )}
+
+      {/* Modal */}
+      <AddPriceRangeModal
+        isOpen={isModalOpen}
+        counties={counties}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };

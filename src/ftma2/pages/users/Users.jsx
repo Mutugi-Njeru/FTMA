@@ -30,7 +30,7 @@ const Users = () => {
         const response = await axios.get(url);
         setTableData(response.data.data);
         setTotalPages(Math.ceil(120 / recordsPerPage));
-        setTotalRecords(90);
+        // setTotalRecords(90);
       } catch (err) {
         console.error("Error fetching data:", err);
       } finally {

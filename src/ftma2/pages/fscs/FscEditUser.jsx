@@ -1,103 +1,77 @@
 import React, { useEffect, useState } from "react";
-import { X, User, Phone, Mail, UserCircle } from "lucide-react";
+import { X, User, Phone, Mail } from "lucide-react";
 import axios from "axios";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";
+import { Switch } from "@headlessui/react";
+import { toast } from "react-toastify";
 
-const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
-  const [roles, setRoles] = useState([]);
-  const [markets, setMarkets] = useState([]);
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    msisdn: "",
-    username: "",
-    gender: "",
-    roleId: "",
-    fsc: "",
-    marketId: "",
-    countyId: "",
-  });
+const FscEditUser = ({ onClose, item, refreshTable }) => {
+  const [firstName, setFirstName] = useState(item?.firstName || "");
+  const [lastName, setLastName] = useState(item?.lastName || "");
+  const [email, setEmail] = useState(item?.email || "");
+  const [msisdn, setMsisdn] = useState(item?.msisdn || "");
+  const [gender, setGender] = useState(item?.gender || "");
+  const [allowRedeemPoints, setAllowRedeemPoints] = useState(
+    item?.canRedeemPoints || false
+  );
 
+  // Update state when `item` changes
   useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await axios.get(BASE_REST_API_URL + "/roles/list");
-        setRoles(response.data.data);
-      } catch (err) {
-        console.error("Error fetching roles:", err);
-      }
-    };
-    fetchRoles();
-  }, []);
-
-  // Fetch markets when role is selected as FSC and countyId changes
-  useEffect(() => {
-    const fetchMarkets = async () => {
-      if (formData.roleId === "4" && formData.countyId) {
-        try {
-          let url =
-            BASE_REST_API_URL +
-            `/markets/list?pageNumber=1&pageSize=100000&startDate=2024-01-01&endDate=2025-10-10&countyIds=${formData.countyId}`;
-          const response = await axios.get(url);
-          setMarkets(response.data.data.markets);
-        } catch (err) {
-          console.error("Error fetching markets:", err);
-        }
-      } else {
-        setMarkets([]);
-      }
-    };
-    fetchMarkets();
-  }, [formData.roleId, formData.countyId]);
-
-  const resetForm = () => {
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      msisdn: "",
-      username: "",
-      gender: "",
-      roleId: "",
-      fsc: "",
-      marketId: 0,
-      countyId: "",
-    });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    if (item) {
+      setFirstName(item.firstName || "");
+      setLastName(item.lastName || "");
+      setEmail(item.email || "");
+      setMsisdn(item.msisdn || "");
+      setGender(item.gender || "");
+      setAllowRedeemPoints(item.canRedeemPoints || false);
+    }
+  }, [item]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = await onSubmit(formData, resetForm); // Wait for the onSubmit result
-    if (success) {
-      onClose(); // Only close the modal if the user creation was successful
+
+    const payload = {
+      firstName,
+      lastName,
+      email,
+      msisdn,
+      gender: gender.toUpperCase(),
+      username: msisdn,
+      redeemPoints: allowRedeemPoints,
+    };
+
+    try {
+      const response = await axios.put(
+        `${BASE_REST_API_URL}/user/${item.userId}/update`,
+        payload
+      );
+
+      if (response.status === 200) {
+        toast.success("User updated successfully");
+        onClose();
+        refreshTable();
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Failed to update user");
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl relative">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">
-              Farm Service Center
-            </h2>
+            <h2 className="text-2xl font-bold text-gray-900">Edit User</h2>
             <button
-              onClick={onClose}
               className="text-gray-500 hover:text-gray-700 transition-colors"
+              onClick={onClose}
             >
               <X className="h-6 w-6" />
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* First Name */}
               <div className="space-y-2">
@@ -114,8 +88,8 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                     name="firstName"
                     type="text"
                     placeholder="John"
-                    value={formData.firstName}
-                    onChange={handleChange}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                     required
                   />
@@ -137,8 +111,8 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                     name="lastName"
                     type="text"
                     placeholder="Doe"
-                    value={formData.lastName}
-                    onChange={handleChange}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                     required
                   />
@@ -160,8 +134,8 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                     name="msisdn"
                     type="tel"
                     placeholder="254712345678"
-                    value={formData.msisdn}
-                    onChange={handleChange}
+                    value={msisdn}
+                    onChange={(e) => setMsisdn(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                     required
                   />
@@ -183,8 +157,8 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                     name="email"
                     type="email"
                     placeholder="john.doe@example.com"
-                    value={formData.email}
-                    onChange={handleChange}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                     required
                   />
@@ -202,8 +176,8 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                 <select
                   id="gender"
                   name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
                   className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
                   required
                 >
@@ -214,84 +188,29 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                 </select>
               </div>
 
-              {/* Role */}
+              {/* Allow user to redeem points */}
               <div className="space-y-2">
                 <label
-                  htmlFor="roleId"
+                  htmlFor="allowRedeemPoints"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Role
+                  Allow user to redeem points
                 </label>
-                <div className="relative">
-                  <UserCircle className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                  <select
-                    id="roleId"
-                    name="roleId"
-                    value={formData.roleId}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                    required
-                  >
-                    <option value="">Select a role</option>
-                    {roles.map((role) => (
-                      <option key={role.roleId} value={role.roleId}>
-                        {role.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              {/* Counties Dropdown */}
-              <div className="space-y-2">
-                <label
-                  htmlFor="countyId"
-                  className="block text-sm font-medium text-gray-700"
+                <Switch
+                  checked={allowRedeemPoints}
+                  onChange={setAllowRedeemPoints}
+                  className={`${
+                    allowRedeemPoints ? "bg-amber-600" : "bg-gray-200"
+                  } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2`}
                 >
-                  County
-                </label>
-                <select
-                  id="countyId"
-                  name="countyId"
-                  value={formData.countyId}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                  required
-                >
-                  <option value="">Select a county</option>
-                  {counties.map((county) => (
-                    <option key={county.countyId} value={county.countyId}>
-                      {county.countyName}
-                    </option>
-                  ))}
-                </select>
+                  <span className="sr-only">Allow user to redeem points</span>
+                  <span
+                    className={`${
+                      allowRedeemPoints ? "translate-x-6" : "translate-x-1"
+                    } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
+                  />
+                </Switch>
               </div>
-
-              {/* Markets Dropdown (Conditional) */}
-              {formData.roleId === "4" && (
-                <div className="space-y-2">
-                  <label
-                    htmlFor="marketId"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Market
-                  </label>
-                  <select
-                    id="marketId"
-                    name="marketId"
-                    value={formData.marketId}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors"
-                    required
-                  >
-                    <option value="">Select a market</option>
-                    {markets.map((market) => (
-                      <option key={market.marketId} value={market.marketId}>
-                        {market.title}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
             </div>
 
             {/* Buttons */}
@@ -307,7 +226,7 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
                 type="submit"
                 className="px-6 py-2.5 rounded-lg bg-amber-600 text-white hover:bg-amber-700 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 transition-colors"
               >
-                Add Service Center
+                Save Changes
               </button>
             </div>
           </form>
@@ -317,4 +236,4 @@ const AddFscModal = ({ counties, isOpen, onClose, onSubmit }) => {
   );
 };
 
-export default AddFscModal;
+export default FscEditUser;
