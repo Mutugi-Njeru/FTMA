@@ -33,7 +33,7 @@ const Dividers = ({
     : 0;
   const totalDistinctWards = totalWards ? totalWards.length : 0;
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 bg-white rounded-xl shadow-sm mb-6 overflow-hidden border border-gray-100">
+    <div className="grid grid-cols-1 md:grid-cols-5 bg-white rounded-xl shadow-md mb-6 overflow-hidden border border-gray-100">
       <StatCard
         icon={<Calendar className="w-4 h-4 text-amber-600" />}
         title="Today"

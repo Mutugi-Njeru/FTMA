@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser, storeToken } from "../service/AuthService";
+import {
+  loginUser,
+  logout,
+  saveLoggedinUser,
+  storeToken,
+} from "../service/AuthService";
 import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
@@ -37,12 +42,15 @@ const Login = () => {
     if (!validate()) return;
 
     setLoading(true);
+
+    logout();
     const auth = btoa(username + ":" + password);
 
     try {
       const response = await loginUser(auth);
       const token = "Bearer " + response.data.data.token;
       storeToken(token);
+      saveLoggedinUser(auth);
       toast.success("Login successful");
       navigate("/overview");
     } catch (error) {
@@ -55,9 +63,6 @@ const Login = () => {
       setPassword("");
     }
   }
-  const clear = () => {
-    localStorage.clear();
-  };
 
   return (
     <div
@@ -162,12 +167,6 @@ const Login = () => {
             Click here
           </a>
         </div>
-        <button
-          className="flex items-center justify-center gap-2 rounded-lg bg-customBrown py-3 px-6 font-bold text-white disabled:bg-customBrownLight"
-          onClick={clear}
-        >
-          clear
-        </button>
       </div>
     </div>
   );

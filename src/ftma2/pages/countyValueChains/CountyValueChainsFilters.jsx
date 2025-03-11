@@ -1,7 +1,6 @@
-import { Download, Plus } from "lucide-react";
 import Select from "react-select";
 import React from "react";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion";
 
 const CountyValueChainsFilters = ({
   countyOptions,
@@ -35,7 +34,7 @@ const CountyValueChainsFilters = ({
                     placeholder="Select county"
                     styles={customSelectStyles2}
                     isClearable
-                    className="w-full"
+                    className="w-40"
                   />
                 </div>
                 <div className="mr-2">

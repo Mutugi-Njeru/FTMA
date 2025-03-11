@@ -19,9 +19,9 @@ const ValueChainFilters = ({
           initial={{ x: "100%", opacity: 0 }} // Start off-screen to the right
           animate={{ x: 0, opacity: 1 }} // Slide in to the left
           transition={{ type: "tween", duration: 0.8 }} // Slower, smoother transition
-          className="border rounded-lg bg-white pt-2 pl-2"
+          className="border rounded-lg bg-white pt-1 pl-2"
         >
-          <div className="p-4 bg-white border-b rounded-xl shadow-sm border-gray-200">
+          <div className="p-2 bg-white border-b shadow-sm border-gray-200">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1">
                 <form onSubmit={handleSearch} className="relative">

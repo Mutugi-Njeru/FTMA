@@ -15,10 +15,9 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
   const [rewardPoints, setRewardPoints] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Fetch countyProducts when selectedCounty changes
   useEffect(() => {
     const fetchData = async () => {
-      if (!selectedCounty) return; // Don't fetch if no county is selected
+      if (!selectedCounty) return;
 
       try {
         let url =
@@ -139,7 +138,7 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-start pt-10 z-50">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden">
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">

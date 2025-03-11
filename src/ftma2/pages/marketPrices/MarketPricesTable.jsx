@@ -1,5 +1,4 @@
 import React from "react";
-import { FaEllipsis } from "react-icons/fa6";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const MarketPricesTable = ({ isLoading, tableData }) => {
@@ -10,58 +9,51 @@ const MarketPricesTable = ({ isLoading, tableData }) => {
           <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
-        <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full rounded-lg text-xs text-left rtl:text-right">
+          <thead className="text-sm border-b border-gray-200">
             <tr>
-              <th className="px-3 py-3 truncate max-w-[100px]">ID</th>
-              <th className="px-3 py-3 truncate max-w-[150px]">Value Chain</th>
-              <th className="px-3 py-3 truncate max-w-[100px]">Market</th>
-              <th className="px-3 py-3 truncate max-w-[100px]">County</th>
-              <th className="px-3 py-3 truncate max-w-[150px]">Fsc Name</th>
-              <th className="px-3 py-3 truncate max-w-[100px]">Unit</th>
-              <th className="px-3 py-3 truncate max-w-[80px]">Farm Price</th>
-              <th className="px-3 py-3 truncate max-w-[80px]">Retail Price</th>
-              <th className="px-3 py-3 truncate max-w-[100px]">
+              <th className="px-2 py-2 truncate max-w-[100px]">ID</th>
+              <th className="px-2 py-2 truncate max-w-[150px]">Value Chain</th>
+              <th className="px-2 py-2 truncate max-w-[100px]">Market</th>
+              <th className="px-2 py-2 truncate max-w-[100px]">County</th>
+              <th className="px-2 py-2 truncate max-w-[150px]">Fsc Name</th>
+              <th className="px-2 py-2 truncate max-w-[100px]">Unit</th>
+              <th className="px-2 py-2 truncate max-w-[100px] ">Farm Price</th>
+              <th className="px-2 py-2 truncate max-w-[100px] ">
+                Retail Price
+              </th>
+              <th className="px-2 py-2 truncate max-w-[100px]">
                 Wholesale Price
               </th>
-              <th className="px-3 py-3 truncate max-w-[150px]">Date Created</th>
-              <th className="px-3 py-3 truncate max-w-[100px]">Action</th>
+              <th className="px-2 py-2 truncate max-w-[80px]">Date Created</th>
             </tr>
           </thead>
           <tbody>
             {tableData.length > 0 ? (
               tableData.map((item) => (
-                <tr
-                  key={item.productPriceId}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
+                <tr key={item.productPriceId} className="bg-white border-b ">
                   <td
                     scope="row"
-                    className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
+                    className="px-2 py-2 font-medium text-blue-400 whitespace-nowrap "
                   >
-                    {item.productPriceId}
+                    #{item.productPriceId}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.product}</td>
-                  <td className="px-3 py-2 truncate"> {item.market}</td>
-                  <td className="px-3 py-2 truncate">{item.county}</td>
-                  <td className="px-3 py-2 truncate">{item.fscName}</td>
-                  <td className="px-3 py-2 truncate">{item.measurementType}</td>
-                  <td className="px-3 py-2 truncate">{item.farmPrice}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-2 py-2 truncate">{item.product}</td>
+                  <td className="px-2 py-2 truncate"> {item.market}</td>
+                  <td className="px-2 py-2 truncate">{item.county}</td>
+                  <td className="px-2 py-2 truncate">{item.fscName}</td>
+                  <td className="px-2 py-2 truncate">{item.measurementType}</td>
+                  <td className="px-2 py-2 truncate ">{item.farmPrice}</td>
+                  <td className="px-2 py-2 whitespace-nowrap ">
                     {item.retailPricePerKg}
                   </td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-2 py-2 truncate ">
                     {" "}
                     {item.wholesalePricePerKg}
                   </td>
-                  <td className="px-3 py-2 truncate"> {item.createdAt}</td>
-                  <td className="px-3 py-2 flex justify-center items-center">
-                    <button
-                      className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                      aria-label="More actions"
-                    >
-                      <FaEllipsis />
-                    </button>
+                  <td className="px-2 py-2 truncate max-w-[100px]">
+                    {" "}
+                    {item.createdAt}
                   </td>
                 </tr>
               ))

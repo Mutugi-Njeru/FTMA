@@ -78,16 +78,16 @@ const AddCountyChainModal = ({ isOpen, onClose, counties, valueChains }) => {
         <div className="flex justify-end">
           <button
             onClick={onClose}
-            className="bg-gray-500 text-white px-4 py-2 rounded-lg mr-2"
+            className="border text-black px-6 py-2 rounded-lg mr-2"
           >
             Cancel
           </button>
           <button
             onClick={handleAddChain}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+            className="bg-amber-600 text-white px-4 py-2 rounded-lg"
             disabled={isLoading}
           >
-            {isLoading ? "Adding..." : "Add"}
+            {isLoading ? "Adding..." : "Add Chain"}
           </button>
         </div>
       </div>

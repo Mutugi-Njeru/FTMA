@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./ftma2/components/Dashboard";
 import Overview from "./ftma2/pages/Overview";
 import Settings from "./ftma2/pages/Settings";
@@ -17,29 +17,140 @@ import MarketPoints from "./ftma2/pages/marketPoints/MarketPoints";
 import Markets from "./ftma2/pages/markets/Markets";
 import Users from "./ftma2/pages/users/Users";
 import CountyValueChains from "./ftma2/pages/countyValueChains/CountyValueChains";
+import { isUserLoggedIn, logout } from "./ftma2/service/AuthService";
 
 function App() {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      const currentTime = Date.now() / 1000;
+      if (decodedToken.exp < currentTime) {
+        logout();
+        window.location.href = "/";
+      }
+    }
+  }, []);
+
+  function AuthenticatedRoute({ children }) {
+    const { isAuth } = isUserLoggedIn();
+
+    if (isAuth) {
+      return children;
+    }
+    return <Navigate to="/" />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<Dashboard />}>
-          <Route path="/overview" element={<Overview />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/fscs" element={<Fscs />} />
-          <Route path="/markets" element={<Markets />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/points" element={<MarketPoints />} />
-          <Route path="/products" element={<ValueChains />} />
-          <Route path="/products/market-prices" element={<MarketPrices />} />
-          <Route path="/products/price-per-kg" element={<PricePerKg />} />
-          <Route path="/products/average-prices" element={<AveragePrices />} />
-          <Route path="/products/price-ranges" element={<PriceRanges />} />
+          <Route
+            path="/overview"
+            element={
+              <AuthenticatedRoute>
+                {" "}
+                <Overview />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <AuthenticatedRoute>
+                <Analytics />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/fscs"
+            element={
+              <AuthenticatedRoute>
+                <Fscs />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/markets"
+            element={
+              <AuthenticatedRoute>
+                <Markets />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              <AuthenticatedRoute>
+                <Users />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/points"
+            element={
+              <AuthenticatedRoute>
+                <MarketPoints />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <AuthenticatedRoute>
+                <ValueChains />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/products/market-prices"
+            element={
+              <AuthenticatedRoute>
+                <MarketPrices />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/products/price-per-kg"
+            element={
+              <AuthenticatedRoute>
+                <PricePerKg />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/products/average-prices"
+            element={
+              <AuthenticatedRoute>
+                <AveragePrices />
+              </AuthenticatedRoute>
+            }
+          />
+          <Route
+            path="/products/price-ranges"
+            element={
+              <AuthenticatedRoute>
+                <PriceRanges />
+              </AuthenticatedRoute>
+            }
+          />
           <Route
             path="/products/county-products"
-            element={<CountyValueChains />}
+            element={
+              <AuthenticatedRoute>
+                <CountyValueChains />
+              </AuthenticatedRoute>
+            }
           />
-          <Route path="/settings" element={<Settings />} />
+          <Route
+            path="/settings"
+            element={
+              <AuthenticatedRoute>
+                <Settings />
+              </AuthenticatedRoute>
+            }
+          />
         </Route>
       </Routes>
       <ToastContainer

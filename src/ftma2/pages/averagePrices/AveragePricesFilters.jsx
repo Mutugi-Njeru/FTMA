@@ -37,7 +37,7 @@ const AveragePricesFilters = ({
                 placeholder="county"
                 styles={customSelectStyles2}
                 isClearable
-                className=" mr-2 w-32"
+                className=" mr-2 w-40"
               />
               <Select
                 options={subcountyOptions}
@@ -46,7 +46,7 @@ const AveragePricesFilters = ({
                 placeholder="Subcounty"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
               <Select
                 options={wardOptions}
@@ -55,7 +55,7 @@ const AveragePricesFilters = ({
                 placeholder="ward"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
 
               <input

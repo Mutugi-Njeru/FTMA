@@ -19,21 +19,21 @@ const customSelectStyles2 = {
   option: (provided, state) => ({
     ...provided,
     backgroundColor: state.isSelected
-      ? "#6366f1"
+      ? "#f59e0b"
       : state.isFocused
-      ? "#e0e7ff"
+      ? "#fef3c7"
       : "white",
-    color: state.isSelected ? "white" : "#374151",
+    color: state.isSelected ? "white" : "#1e293b",
     fontSize: "0.875rem",
     padding: "0.5rem 1rem",
     cursor: "pointer",
     "&:active": {
-      backgroundColor: "#4f46e5",
+      backgroundColor: "#fef3c7",
     },
   }),
   singleValue: (provided) => ({
     ...provided,
-    color: "#374151",
+    color: "#1e293b",
     fontSize: "0.875rem",
   }),
   placeholder: (provided) => ({

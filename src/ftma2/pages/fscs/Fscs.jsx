@@ -32,7 +32,7 @@ const Fscs = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State for edit modal visibility
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const recordsPerPage = 10;
+  const recordsPerPage = 15;
 
   const handleCreateUser = async (formData, resetForm) => {
     try {
@@ -293,7 +293,7 @@ const Fscs = () => {
       </div>
 
       {/* Title and Action Buttons */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
         <h1 className="text-2xl font-semibold text-gray-800">
           Service Centers
         </h1>

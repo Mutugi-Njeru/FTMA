@@ -14,7 +14,7 @@ const Pagination = ({
     <div className="px-4 py-4 flex items-center justify-between border-t border-gray-200 sm:px-6">
       <div className="flex-1 flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-700">
+          <p className="text-sm text-amber-600">
             Showing{" "}
             <span className="font-medium">
               {currentPage * recordsPerPage + 1}

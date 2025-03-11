@@ -11,60 +11,39 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { BASE_REST_API_URL } from "../service/CountyProductsService";
 
+const getTodayDate = () => {
+  const today = new Date();
+  return today.toLocaleDateString("en-CA"); // Ensures YYYY-MM-DD format in local time
+};
+
 const TopCards = () => {
-  const [valueChainCount, setValueChainCount] = useState(0);
   const [markets, setMarkets] = useState(0);
-  const [fscs, setFscs] = useState(0);
-  // Fetch value Chains count
-  useEffect(() => {
-    const fetchValueChainsCount = async () => {
-      try {
-        const response = await axios.get(BASE_REST_API_URL + "/products/list");
-        setValueChainCount(response.data.data.totalCount);
-      } catch (err) {
-        console.error("Error fetching value chains count:", err);
-      }
-    };
-    fetchValueChainsCount();
-  }, []);
+  const [fsc, setFsc] = useState(0);
+  const [valueChains, setValueChains] = useState(0);
+  const [date, setDate] = useState(getTodayDate());
 
-  // Fetch markets count
+  // Fetch summary data
   useEffect(() => {
-    const fetchMarketsCount = async () => {
+    const fetchSummary = async () => {
       try {
         const response = await axios.get(
-          BASE_REST_API_URL +
-            "/markets/list?pageNumber=2&pageSize=15&startDate=2024-01-01&endDate=2024-12-30"
+          BASE_REST_API_URL + `/report/summaries?date=${date}`
         );
-        setMarkets(response.data.data.totalRecords);
+        setValueChains(response.data.data.summaries.products);
+        setMarkets(response.data.data.summaries.markets);
+        setFsc(response.data.data.summaries.activeFsc);
       } catch (err) {
-        console.error("Error fetching value chains count:", err);
+        console.error("Error fetching summaries:", err);
       }
     };
-    fetchMarketsCount();
-  }, []);
-
-  // Fetch fscs count
-  useEffect(() => {
-    const fetchFscsCount = async () => {
-      try {
-        const response = await axios.get(
-          BASE_REST_API_URL +
-            "/fsc/list?pageNumber=1&pageSize=10&startDate=2023-01-01&endDate=2025-09-01"
-        );
-        setFscs(response.data.data.totalRecords);
-      } catch (err) {
-        console.error("Error fetching value chains count:", err);
-      }
-    };
-    fetchFscsCount();
+    fetchSummary();
   }, []);
 
   const cardItems = [
     {
       icon: <Link2 size={20} color="white" />,
       label: "Value Chains",
-      amount: valueChainCount,
+      amount: valueChains,
     },
     {
       icon: <ShoppingCart size={20} color="white" />,
@@ -74,7 +53,7 @@ const TopCards = () => {
     {
       icon: <BarChart size={20} color="white" />,
       label: "Fscs",
-      amount: fscs,
+      amount: fsc,
     },
     {
       icon: <DollarSign size={20} color="white" />,

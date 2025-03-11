@@ -10,7 +10,7 @@ import axios from "axios";
 import { Download, Plus, SlidersHorizontal } from "lucide-react";
 import CountyValueChainsHeader from "./CountyValueChainsHeader";
 import CountyValueChainsFilters from "./CountyValueChainsFilters";
-import Pagination from "./Pagination"; // Import the new Pagination component
+import Pagination from "./Pagination";
 import CountyValueChainsTable from "./CountyValueChainsTable";
 import AddCountyChainModal from "./AddCountyChainModal";
 
@@ -25,7 +25,7 @@ const CountyValueChains = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [valueChains, setValueChains] = useState([]);
 
   // Fetch initial counties data
@@ -167,7 +167,7 @@ const CountyValueChains = () => {
       {/* Loading Spinner */}
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-amber-500"></div>
         </div>
       ) : (
         <>

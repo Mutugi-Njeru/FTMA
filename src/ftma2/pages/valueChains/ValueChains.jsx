@@ -1,22 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactPaginate from "react-paginate";
-import { GiCorn } from "react-icons/gi";
 import { format } from "date-fns";
 import {
-  Calendar,
-  Search,
-  Filter,
-  RefreshCw,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   AlertCircle,
-  ArrowUpDown,
-  Leaf,
   Download,
   Plus,
-  Home,
   SlidersHorizontal,
 } from "lucide-react";
 import ValueChainFilters from "./ValueChainFilters";
@@ -38,7 +29,7 @@ const ValueChains = () => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
-  const pageSize = 10;
+  const pageSize = 15;
 
   const fetchData = async () => {
     setLoading(true);
@@ -246,7 +237,7 @@ const ValueChains = () => {
           <div className="flex items-center justify-between">
             <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-amber-600">
                   Showing{" "}
                   <span className="font-medium">
                     {filteredData.length > 0
@@ -277,7 +268,7 @@ const ValueChains = () => {
               pageClassName={
                 "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               }
-              activeClassName={"z-10 border-amber-600 text-amber-500"}
+              activeClassName={"z-10 border-blue-600 text-blue-400"}
               previousClassName={
                 "relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               }

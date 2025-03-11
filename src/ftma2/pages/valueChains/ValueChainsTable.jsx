@@ -1,4 +1,4 @@
-import { AlertCircle, ArrowUpDown, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import React from "react";
 
 const ValueChainsTable = ({
@@ -8,67 +8,53 @@ const ValueChainsTable = ({
   getStatusBadgeClass,
 }) => {
   return (
-    <div className="mt-3 rounded-xl p-1 bg-white">
+    <div className="mt-3 rounded-xl bg-white shadow-sm">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-gray-50">
+        <thead className="">
           <tr className="rounded-t-lg">
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("productId")}
+              className="px-6 py-3 text-left text-xs font-medium  tracking-wider cursor-pointer"
             >
-              <div className="flex items-center space-x-1">
-                <span>ID</span>
-              </div>
+              ID
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("productName")}
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
             >
-              <div className="flex items-center space-x-1">
-                <span>Name</span>
-              </div>
+              Name
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
               onClick={() => requestSort("createdBy")}
             >
-              <div className="flex items-center space-x-1">
-                <span>Created By</span>
-              </div>
+              Created By
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
               onClick={() => requestSort("createdAt")}
             >
-              <div className="flex items-center space-x-1">
-                <span>Created At</span>
-              </div>
+              Created At
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
               onClick={() => requestSort("updatedAt")}
             >
-              <div className="flex items-center space-x-1">
-                <span>Updated At</span>
-              </div>
+              Updated At
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
               onClick={() => requestSort("updatedBy")}
             >
-              <div className="flex items-center space-x-1">
-                <span>Updated By</span>
-              </div>
+              Updated By
             </th>
             <th
               scope="col"
-              className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+              className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
               onClick={() => requestSort("status")}
             >
               <div className="flex items-center space-x-1">
@@ -107,22 +93,22 @@ const ValueChainsTable = ({
                 key={item.productId}
                 className="hover:bg-gray-50 transition-colors"
               >
-                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {item.productId}
+                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 ">
+                  #{item.productId}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-gray-700">
+                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium ">
                   {item.productName}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-1 whitespace-nowrap text-sm ">
                   {item.createdBy || "N/A"}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-1 whitespace-nowrap text-sm ">
                   {formatDate(item.createdAt)}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-1 whitespace-nowrap text-sm ">
                   {formatDate(item.createdAt)}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
+                <td className="px-6 py-1 whitespace-nowrap text-sm ">
                   {item.updatedBy || "N/A"}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">

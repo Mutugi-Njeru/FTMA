@@ -1,5 +1,4 @@
 import React from "react";
-import { FaEllipsis } from "react-icons/fa6";
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Helper function to capitalize the first letter of a string
@@ -16,8 +15,8 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
           <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
-        <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full rounded-lg text-xs text-left rtl:text-right text-gray-500">
+          <thead className="text-xs border-b border-gray-200">
             <tr>
               <th className="px-3 py-3">ID</th>
               <th className="px-3 py-3">Value Chain</th>
@@ -36,13 +35,13 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
               tableData.map((item) => (
                 <tr
                   key={item.productId}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="bg-white border-b hover:bg-gray-50 "
                 >
                   <td
                     scope="row"
-                    className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
+                    className="px-3 py-2 font-medium text-blue-400 whitespace-nowrap  truncate"
                   >
-                    {item.productId}
+                    #{item.productId}
                   </td>
                   <td className="px-3 py-2 truncate">
                     {capitalizeFirstLetter(item.product)}
@@ -58,7 +57,7 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
                     {capitalizeFirstLetter(item.fscName)}
                   </td>
                   <td className="px-3 py-2 truncate">{item.farmPrice}</td>
-                  <td className="px-4 py-3 whitespace-nowrap">
+                  <td className="px-3 py-2 whitespace-nowrap">
                     {item.retailPrice}
                   </td>
                   <td className="px-3 py-2 truncate"> {item.wholesalePrice}</td>

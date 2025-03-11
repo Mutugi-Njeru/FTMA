@@ -25,8 +25,8 @@ const FscFilters = ({
   customSelectStyles2,
 }) => {
   return (
-    <div className="bg-white rounded-xl shadow-sm p-5 mb-3 border border-gray-100">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
+    <div className="bg-white rounded-2xl shadow-md p-3 mb-6 border border-gray-100">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-1">
         {/* Search Bar */}
         <motion.div
           className="relative flex-grow max-w-md"
@@ -42,7 +42,7 @@ const FscFilters = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search by name, market or phone..."
-            className="pl-10 pr-4 py-2.5 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
+            className="pl-10 pr-4 py-2.5 w-full text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all"
           />
         </motion.div>
 
@@ -64,7 +64,7 @@ const FscFilters = ({
             whileTap={{ scale: 0.95 }}
           >
             <SlidersHorizontal className="w-4 h-4" />
-            <span className="text-sm font-medium">
+            <span className="text-xs font-medium">
               {showAdvancedFilters ? "Hide Filters" : "Show Filters"}
             </span>
           </motion.button>
@@ -76,7 +76,7 @@ const FscFilters = ({
             whileTap={{ scale: 0.95 }}
           >
             <RotateCcw className="w-4 h-4" />
-            <span className="text-sm font-medium">Reset</span>
+            <span className="text-xs font-medium">Reset</span>
           </motion.button>
         </motion.div>
       </div>
@@ -85,7 +85,7 @@ const FscFilters = ({
       <AnimatePresence>
         {showAdvancedFilters && (
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-4 pt-4 border-t border-gray-100"
+            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-2 pt-4 border-t border-gray-100"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -98,7 +98,7 @@ const FscFilters = ({
               placeholder="Select county"
               styles={customSelectStyles2}
               isClearable
-              className="col-span-1"
+              className="col-span-1 text-sm"
             />
 
             <Select
@@ -108,7 +108,7 @@ const FscFilters = ({
               placeholder="Select subcounty"
               styles={customSelectStyles2}
               isClearable
-              className="col-span-1"
+              className="col-span-1 text-sm"
             />
 
             <Select
@@ -118,14 +118,14 @@ const FscFilters = ({
               onChange={handleWardChange}
               styles={customSelectStyles2}
               isClearable
-              className="col-span-1"
+              className="col-span-1 text-sm"
             />
 
             <div className="relative col-span-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"></div>
               <input
                 type="date"
-                className="pl-10 pr-4 py-2.5 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                className="pl-5 pr-2 py-1.5 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
                 placeholder="Start date"
@@ -136,7 +136,7 @@ const FscFilters = ({
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"></div>
               <input
                 type="date"
-                className="pl-10 pr-4 py-2.5 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
+                className="pl-5 pr-2 py-1.5 w-full border border-gray-200 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
                 placeholder="End date"
