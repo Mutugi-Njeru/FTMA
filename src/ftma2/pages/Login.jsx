@@ -4,6 +4,7 @@ import {
   loginUser,
   logout,
   saveLoggedinUser,
+  saveUsername,
   storeToken,
 } from "../service/AuthService";
 import { toast } from "react-toastify";
@@ -51,6 +52,7 @@ const Login = () => {
       const token = "Bearer " + response.data.data.token;
       storeToken(token);
       saveLoggedinUser(auth);
+      saveUsername(username);
       toast.success("Login successful");
       navigate("/overview");
     } catch (error) {

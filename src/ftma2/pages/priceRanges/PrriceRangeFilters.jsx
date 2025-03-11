@@ -23,10 +23,9 @@ const PrriceRangeFilters = ({
     <div>
       {showAdvancedFilters && (
         <motion.div
-          initial={{ x: "100%", opacity: 0 }} // Start from the right and invisible
-          animate={{ x: 0, opacity: 1 }} // Slide to the left and become visible
-          transition={{ type: "tween", duration: 0.8 }} // Slower, smoother transition
-          // transition={{ duration: 0.5, ease: "easeOut" }} // Animation duration and easing
+          initial={{ x: "100%", opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ type: "tween", duration: 0.8 }}
           className="border rounded-lg bg-white pt-2 pl-2"
         >
           <div className="rounded-lg mb-2 p-2">
@@ -38,7 +37,7 @@ const PrriceRangeFilters = ({
                 placeholder="county"
                 styles={customSelectStyles2}
                 isClearable
-                className=" mr-2 w-32"
+                className=" mr-2 w-40"
               />
               <Select
                 options={subcountyOptions}
@@ -47,7 +46,7 @@ const PrriceRangeFilters = ({
                 placeholder="Subcounty"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
               <Select
                 options={wardOptions}
@@ -56,7 +55,7 @@ const PrriceRangeFilters = ({
                 placeholder="ward"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
 
               <input

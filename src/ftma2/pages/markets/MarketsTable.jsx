@@ -16,8 +16,8 @@ const MarketsTable = ({ isLoading, tableData }) => {
           <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
-        <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full rounded-lg text-xs text-left rtl:text-right ">
+          <thead className="text-xs text-gray-700 border-b">
             <tr>
               <th className="px-3 py-3">ID</th>
               <th className="px-3 py-3">Market Title</th>
@@ -34,29 +34,33 @@ const MarketsTable = ({ isLoading, tableData }) => {
               tableData.map((item) => (
                 <tr
                   key={item.marketId}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="bg-white border-b  hover:bg-gray-50"
                 >
                   <td
                     scope="row"
-                    className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
+                    className="px-3 py-1.5 font-medium text-blue-400 whitespace-nowrap truncate"
                   >
-                    {item.marketId}
+                    #{item.marketId}
                   </td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-3 py-1.5 truncate">
                     {capitalizeFirstLetter(item.title)}
                   </td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-3 py-1.5 truncate">
                     {capitalizeFirstLetter(item.county)}
                   </td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-3 py-1.5 truncate">
                     {capitalizeFirstLetter(item.subCounty)}
                   </td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-3 py-1.5 truncate">
                     {capitalizeFirstLetter(item.ward)}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.createdAt}</td>
-                  <td className="px-3 py-2 truncate">{item.updatedAt}</td>
-                  <td className="px-3 py-2 truncate">Active</td>
+                  <td className="px-3 py-1.5 truncate">{item.createdAt}</td>
+                  <td className="px-3 py-1.5 truncate">{item.updatedAt}</td>
+                  <td className="px-3 py-1.5 truncate">
+                    <span className="bg-green-100 text-green-800 rounded-full px-3 py-1">
+                      Active
+                    </span>
+                  </td>
                 </tr>
               ))
             ) : (

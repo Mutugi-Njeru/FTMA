@@ -15,7 +15,7 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
           <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
-        <table className="w-full rounded-lg text-xs text-left rtl:text-right text-gray-500">
+        <table className="w-full rounded-lg text-xs text-left rtl:text-right">
           <thead className="text-xs border-b border-gray-200">
             <tr>
               <th className="px-3 py-3">ID</th>
@@ -53,9 +53,7 @@ const AveragePricesTable = ({ isLoading, tableData }) => {
                   <td className="px-3 py-2 truncate">
                     {capitalizeFirstLetter(item.county)}
                   </td>
-                  <td className="px-3 py-2 truncate">
-                    {capitalizeFirstLetter(item.fscName)}
-                  </td>
+                  <td className="px-3 py-2 truncate">{item.fscName}</td>
                   <td className="px-3 py-2 truncate">{item.farmPrice}</td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {item.retailPrice}

@@ -5,6 +5,7 @@ import { getLocations } from "../../service/FscsService";
 import axios from "axios";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 import { toast } from "react-toastify";
+import customSelectStyles3 from "../../../styles/customSelectStyles3";
 
 const CreateMarketModal = ({ setIsModalOpen, isModalOpen }) => {
   const [counties, setCounties] = useState([]);
@@ -161,6 +162,7 @@ const CreateMarketModal = ({ setIsModalOpen, isModalOpen }) => {
                       value={selectedCounty}
                       onChange={handleCountyChange}
                       placeholder="Select County"
+                      styles={customSelectStyles3}
                       isDisabled={isLoading}
                     />
                   </div>
@@ -178,6 +180,7 @@ const CreateMarketModal = ({ setIsModalOpen, isModalOpen }) => {
                       value={selectedSubcounty}
                       onChange={handleSubcountyChange}
                       placeholder="Select Subcounty"
+                      styles={customSelectStyles3}
                       isDisabled={!selectedCounty || isLoading}
                     />
                   </div>
@@ -195,6 +198,7 @@ const CreateMarketModal = ({ setIsModalOpen, isModalOpen }) => {
                       value={selectedWard}
                       onChange={handleWardChange}
                       placeholder="Select Ward"
+                      styles={customSelectStyles3}
                       isDisabled={!selectedSubcounty || isLoading}
                     />
                   </div>

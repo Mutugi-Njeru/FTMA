@@ -25,6 +25,7 @@ export const loginUser = (auth) => {
   );
 
 export const storeToken=(token)=>localStorage.setItem("token", token)
+export const saveUsername=(username)=>localStorage.setItem("username", username)
 export const getToken=()=>localStorage.getItem("token") 
 export const saveLoggedinUser = (auth) => localStorage.setItem("authenticatedUser", auth);
 export const logout=()=>{

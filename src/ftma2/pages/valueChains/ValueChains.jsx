@@ -268,7 +268,7 @@ const ValueChains = () => {
               pageClassName={
                 "relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
               }
-              activeClassName={"z-10 border-blue-600 text-blue-400"}
+              activeClassName={"z-10 border-blue-500 text-blue-400"}
               previousClassName={
                 "relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
               }

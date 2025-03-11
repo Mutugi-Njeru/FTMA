@@ -1,4 +1,3 @@
-import { Download, Plus } from "lucide-react";
 import React from "react";
 import Select from "react-select";
 import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
@@ -32,7 +31,7 @@ const MarketsFilters = ({
                 placeholder="county"
                 styles={customSelectStyles2}
                 isClearable
-                className=" mr-2 w-32"
+                className=" mr-2 w-40"
               />
               <Select
                 options={subcountyOptions}
@@ -41,7 +40,7 @@ const MarketsFilters = ({
                 placeholder="Subcounty"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
               <Select
                 options={wardOptions}
@@ -50,7 +49,7 @@ const MarketsFilters = ({
                 placeholder="ward"
                 styles={customSelectStyles2}
                 isClearable
-                className="w-32 mr-2"
+                className="w-40 mr-2"
               />
 
               <input

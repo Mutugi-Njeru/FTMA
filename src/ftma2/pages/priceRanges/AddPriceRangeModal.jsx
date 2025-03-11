@@ -4,6 +4,8 @@ import Select from "react-select";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";
 import axios from "axios";
 import { toast } from "react-toastify";
+import CustomSelectStyles from "./CustomSelectStyles";
+import CustomSelectStyles2 from "./CustomSelectStyles2";
 
 const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
   const [selectedCounty, setSelectedCounty] = useState(null);
@@ -121,24 +123,8 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
   };
 
   if (!isOpen) return null;
-
-  const customSelectStyles = {
-    control: (base) => ({
-      ...base,
-      borderColor: "#E5E7EB",
-      "&:hover": {
-        borderColor: "#9CA3AF",
-      },
-      boxShadow: "none",
-      "&:focus-within": {
-        borderColor: "#6366F1",
-        boxShadow: "0 0 0 1px #6366F1",
-      },
-    }),
-  };
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-start pt-10 z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex justify-center items-start pt-1 z-50">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 overflow-hidden">
         <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">
@@ -164,7 +150,7 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
                 value={selectedCounty}
                 onChange={handleCountyChange}
                 placeholder="Select County"
-                styles={customSelectStyles}
+                styles={CustomSelectStyles}
                 className="react-select-container"
               />
             </div>
@@ -179,7 +165,7 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
                 value={selectedProduct}
                 onChange={handleProductChange}
                 placeholder="Select Commodity"
-                styles={customSelectStyles}
+                styles={CustomSelectStyles}
               />
             </div>
 
@@ -193,7 +179,7 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
                 value={selectedUnit}
                 onChange={handleUnitChange}
                 placeholder="Select Unit"
-                styles={customSelectStyles}
+                styles={CustomSelectStyles2}
               />
             </div>
 
@@ -250,13 +236,13 @@ const AddPriceRangeModal = ({ isOpen, onClose, counties }) => {
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              className="px-6 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-indigo-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+              className="px-4 py-2 bg-amber-600 border border-transparent rounded-md text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
             >
               Save Price Range
             </button>

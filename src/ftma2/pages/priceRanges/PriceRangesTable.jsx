@@ -3,14 +3,14 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const PriceRangesTable = ({ isLoading, tableData }) => {
   return (
-    <div className="mt-4 p-2 rounded-lg bg-white ">
+    <div className="mt-4 p-2 rounded-lg bg-white shadow-sm ">
       {isLoading ? (
         <div className="flex justify-center items-center h-64">
           <ClipLoader color="#D97706" size={50} />
         </div>
       ) : (
-        <table className="w-full rounded-lg text-sm text-left rtl:text-right text-gray-500">
-          <thead className="text-xs text-gray-700 uppercase bg-gray-50">
+        <table className="w-full rounded-lg text-xs text-left rtl:text-right">
+          <thead className="text-sm border-b">
             <tr>
               <th className="px-3 py-3">ID</th>
               <th className="px-3 py-3">Name</th>
@@ -31,21 +31,29 @@ const PriceRangesTable = ({ isLoading, tableData }) => {
                 >
                   <td
                     scope="row"
-                    className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white truncate"
+                    className="px-3 py-1 font-medium text-blue-400 whitespace-nowrap dark:text-white truncate"
                   >
-                    {item.priceRangeSettingId}
+                    #{item.priceRangeSettingId}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.productName}</td>
-                  <td className="px-3 py-2 truncate">
+                  <td className="px-3 py-1 truncate">{item.productName}</td>
+                  <td className="px-3 py-1 truncate">
                     {" "}
                     {item.measurementUnit}
                   </td>
-                  <td className="px-3 py-2 truncate">{item.minPrice}</td>
-                  <td className="px-3 py-2 truncate">{item.maxPrice}</td>
-                  <td className="px-3 py-2 truncate">{item.createdBy}</td>
-                  <td className="px-3 py-2 truncate">{item.createdAt}</td>
-                  <td className="px-3 py-2 truncate">
-                    {item.isActive ? "Active" : "Inactive"}
+                  <td className="px-3 py-1 truncate">{item.minPrice}</td>
+                  <td className="px-3 py-1 truncate">{item.maxPrice}</td>
+                  <td className="px-3 py-1 truncate">{item.createdBy}</td>
+                  <td className="px-3 py-1 truncate">{item.createdAt}</td>
+                  <td className="px-3 py-1 truncate">
+                    <span
+                      className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-center w-[60px] ${
+                        item.isActive
+                          ? "bg-green-100 text-green-800"
+                          : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {item.isActive ? "Active" : "Inactive"}
+                    </span>
                   </td>
                 </tr>
               ))
