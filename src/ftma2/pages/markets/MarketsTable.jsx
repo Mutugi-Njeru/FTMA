@@ -1,5 +1,4 @@
 import React from "react";
-import { FaEllipsis } from "react-icons/fa6";
 import ClipLoader from "react-spinners/ClipLoader";
 
 // Helper function to capitalize the first letter of a string

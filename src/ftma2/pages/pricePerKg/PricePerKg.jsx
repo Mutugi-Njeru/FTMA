@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { GiCorn } from "react-icons/gi";
-import { FaEllipsis } from "react-icons/fa6";
 import PricePerKgFilters from "./PricePerKgFilters";
 import { Download, SlidersHorizontal } from "lucide-react";
 import PricePerKgHeader from "./PricePerKgHeader";

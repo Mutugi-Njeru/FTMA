@@ -1,9 +1,8 @@
 import React from "react";
 import ClipLoader from "react-spinners/ClipLoader";
 
-// Helper function to capitalize the first letter of a string
 const capitalizeFirstLetter = (str) => {
-  if (!str) return str; // Handle empty strings
+  if (!str) return str;
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 

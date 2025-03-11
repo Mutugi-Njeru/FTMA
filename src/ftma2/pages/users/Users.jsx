@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Plus, X } from "lucide-react";
+import { Plus } from "lucide-react";
 import UsersHeader from "./UsersHeader";
 import UsersTable from "./UsersTable";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";

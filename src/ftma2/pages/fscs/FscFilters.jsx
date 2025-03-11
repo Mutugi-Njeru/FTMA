@@ -1,4 +1,4 @@
-import { Calendar, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
+import { RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 import Select from "react-select";
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";

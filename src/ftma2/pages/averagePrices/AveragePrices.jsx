@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GiCorn } from "react-icons/gi";
-import Select from "react-select";
-import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
-import { Download, Plus, SlidersHorizontal } from "lucide-react";
-import { FaEllipsis } from "react-icons/fa6";
+import { Download, SlidersHorizontal } from "lucide-react";
 import AveragePricesFilters from "./AveragePricesFilters";
 import AveragePricesHeader from "./AveragePricesHeader";
 import { getLocations } from "../../service/FscsService";

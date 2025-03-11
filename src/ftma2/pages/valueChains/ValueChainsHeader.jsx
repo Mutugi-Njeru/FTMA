@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  GiCorn,
-  GiWheat,
-  GiFruitTree,
-  GiCoffeeBeans,
-  GiPlantSeed,
-} from "react-icons/gi";
+import { GiCorn } from "react-icons/gi";
 
 const ValueChainsHeader = () => {
   return (

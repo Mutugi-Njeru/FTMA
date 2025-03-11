@@ -26,7 +26,11 @@ const DoughnutChart = () => {
     },
   };
 
-  return <Doughnut data={data} options={options} />;
+  return (
+    <div style={{ width: "260px", height: "300px" }}>
+      <Doughnut data={data} options={options} />
+    </div>
+  );
 };
 
 export default DoughnutChart;

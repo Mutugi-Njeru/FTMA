@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GiCorn } from "react-icons/gi";
-import { Download, Plus, SlidersHorizontal } from "lucide-react";
-import { FaEllipsis } from "react-icons/fa6";
+import { Download, SlidersHorizontal } from "lucide-react";
 import MarketPricesFilters from "./MarketPricesFilters";
 import { getLocations } from "../../service/FscsService";
 import { BASE_REST_API_URL } from "../../service/CountyProductsService";

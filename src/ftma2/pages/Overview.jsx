@@ -23,7 +23,7 @@ const Overview = () => {
         <div className="bg-white rounded-lg w-3/4 shadow-md">
           <MarketPriceComparisonChart />
         </div>
-        <div className="bg-customBrown rounded-lg w-1/4 ml-2 shadow-md">
+        <div className="bg-white rounded-lg w-1/4 ml-2 p-2 pt-3 shadow-md">
           <DoughnutChart />
         </div>
       </div>

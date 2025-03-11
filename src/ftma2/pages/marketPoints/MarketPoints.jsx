@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { GiCorn } from "react-icons/gi";
-import Select from "react-select";
-import { Download, Plus, SlidersHorizontal } from "lucide-react";
-import { FaEllipsis } from "react-icons/fa6";
-import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import { SlidersHorizontal } from "lucide-react";
 import MarketPointFilters from "./MarketPointFilters";
 
 const MarketPoints = () => {

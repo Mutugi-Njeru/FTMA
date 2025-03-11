@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { GiCorn } from "react-icons/gi";
-import { FaEllipsis } from "react-icons/fa6";
 import { Download, Plus, SlidersHorizontal, X } from "lucide-react";
 import MarketsFilters from "./MarketsFilters";
 import MarketsHeader from "./MarketsHeader";

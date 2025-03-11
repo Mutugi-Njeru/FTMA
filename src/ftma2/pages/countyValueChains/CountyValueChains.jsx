@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Select from "react-select";
 import { getLocations } from "../../service/FscsService";
 import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
 import {
