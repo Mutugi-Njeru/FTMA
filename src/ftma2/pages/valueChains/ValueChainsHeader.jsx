@@ -1,5 +1,11 @@
 import React from "react";
-import { GiCorn } from "react-icons/gi";
+import {
+  GiCorn,
+  GiWheat,
+  GiFruitTree,
+  GiCoffeeBeans,
+  GiPlantSeed,
+} from "react-icons/gi";
 
 const ValueChainsHeader = () => {
   return (
@@ -7,7 +13,6 @@ const ValueChainsHeader = () => {
       <div className="flex items-center gap-4">
         <div className="flex-shrink-0 p-3 bg-amber-50 rounded-lg">
           <GiCorn className="w-6 h-6 text-amber-600" />{" "}
-          {/* Replaced Home icon with Corn icon */}
         </div>
         <div>
           <h2 className="text-lg font-semibold text-gray-800">Value Chains</h2>

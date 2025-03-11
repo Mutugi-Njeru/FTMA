@@ -8,8 +8,8 @@ const ValueChainsTable = ({
   getStatusBadgeClass,
 }) => {
   return (
-    <div className="mt-3 rounded-xl bg-white shadow-sm">
-      <table className="min-w-full divide-y divide-gray-200">
+    <div className="mt-3 rounded-xl  bg-white shadow-sm">
+      <table className="min-w-full text-xs divide-y divide-gray-200">
         <thead className="">
           <tr className="rounded-t-lg">
             <th
@@ -27,35 +27,30 @@ const ValueChainsTable = ({
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("createdBy")}
             >
               Created By
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("createdAt")}
             >
               Created At
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("updatedAt")}
             >
               Updated At
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("updatedBy")}
             >
               Updated By
             </th>
             <th
               scope="col"
               className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider cursor-pointer"
-              onClick={() => requestSort("status")}
             >
               <div className="flex items-center space-x-1">
                 <span>Status</span>
@@ -93,31 +88,31 @@ const ValueChainsTable = ({
                 key={item.productId}
                 className="hover:bg-gray-50 transition-colors"
               >
-                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-blue-400 ">
+                <td className="px-6 py-1 whitespace-nowrap  font-medium text-blue-400 ">
                   #{item.productId}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm font-medium ">
+                <td className="px-6 py-1 whitespace-nowraps ">
                   {item.productName}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm ">
+                <td className="px-6 py-1 whitespace-nowrap ">
                   {item.createdBy || "N/A"}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm ">
+                <td className="px-6 py-1 whitespace-nowrap  ">
                   {formatDate(item.createdAt)}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm ">
+                <td className="px-6 py-1 whitespace-nowrap ">
                   {formatDate(item.createdAt)}
                 </td>
-                <td className="px-6 py-1 whitespace-nowrap text-sm ">
+                <td className="px-6 py-1 whitespace-nowrap ">
                   {item.updatedBy || "N/A"}
                 </td>
                 <td className="px-6 py-1 whitespace-nowrap">
                   <span
-                    className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(
+                    className={`px-2 inline-flex leading-5 font-semibold rounded-full ${getStatusBadgeClass(
                       item.status
                     )}`}
                   >
-                    {item.status || "Unknown"}
+                    {item.status || "Active"}
                   </span>
                 </td>
               </tr>

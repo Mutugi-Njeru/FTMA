@@ -79,7 +79,7 @@ const CountyValueChains = () => {
       if (selectedCounty) {
         response = await getCountyProducts({
           pageNumber: currentPage + 1,
-          pageSize: 10,
+          pageSize: 15,
           startDate,
           endDate,
           countyIds: selectedCounty.value,
@@ -90,7 +90,7 @@ const CountyValueChains = () => {
           {
             params: {
               pageNumber: currentPage + 1,
-              pageSize: 10,
+              pageSize: 15,
               startDate,
               endDate,
             },
@@ -181,7 +181,7 @@ const CountyValueChains = () => {
               totalPages={pageCount}
               handlePageChange={handlePageClick}
               filteredData={data}
-              recordsPerPage={10}
+              recordsPerPage={15}
             />
           )}
         </>

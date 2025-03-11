@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { BsDiagram3Fill } from "react-icons/bs";
-import { FaUser, FaUsers, FaUserCircle } from "react-icons/fa";
+import { FaUser, FaCoins, FaUsers, FaUserCircle } from "react-icons/fa";
+import {
+  GiCorn,
+  GiWheat,
+  GiTwoCoins,
+  GiWeight,
+  GiPriceTag,
+} from "react-icons/gi";
 import {
   MdAutoGraph,
   MdLogout,
@@ -43,32 +50,32 @@ const Sidebar = () => {
       hasDropdown: true,
       dropdownItems: [
         {
-          icon: <BsDiagram3Fill size={16} />,
+          icon: <GiCorn size={16} />,
           label: "Value Chains",
           path: "/products",
         },
         {
-          icon: <FaUsers size={16} />,
+          icon: <GiWheat size={16} />,
           label: "County Products",
           path: "/products/county-products",
         },
         {
-          icon: <MdAutoGraph size={16} />,
+          icon: <GiPriceTag size={16} />,
           label: "Market Prices",
           path: "/products/market-prices",
         },
         {
-          icon: <FaUser size={16} />,
+          icon: <GiWeight size={16} />,
           label: "Prices per Kg",
           path: "/products/price-per-kg",
         },
         {
-          icon: <MdAutoGraph size={16} />,
+          icon: <FaCoins size={16} />,
           label: "Average Prices",
           path: "/products/average-prices",
         },
         {
-          icon: <FaUserCircle size={16} />,
+          icon: <GiTwoCoins size={16} />,
           label: "Price Ranges",
           path: "/products/price-ranges",
         },
