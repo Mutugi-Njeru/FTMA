@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getLocations } from "../../service/FscsService";
-import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import customSelectStyles2 from "../../../styles/customSelectStyles2";
 import {
   BASE_REST_API_URL,
   getCountyProducts,

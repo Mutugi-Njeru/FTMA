@@ -1,6 +1,6 @@
 import React from "react";
 import Select from "react-select";
-import customSelectStyles2 from "../../../styles/CustomSelectStyles2";
+import customSelectStyles2 from "../../../styles/customSelectStyles2";
 
 const MarketPricesFilters = ({
   showAdvancedFilters,
