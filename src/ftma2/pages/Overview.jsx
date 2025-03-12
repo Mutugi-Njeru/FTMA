@@ -37,7 +37,7 @@ const Overview = () => {
     //     </div>
     //   </div>
     // </div>
-    <div className="p-4">
+    <div className="p-1">
       {/* Top Cards Section */}
       <TopCards />
 

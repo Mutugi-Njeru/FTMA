@@ -73,7 +73,7 @@ const TopCards = () => {
   ];
 
   return (
-    <div className="flex flex-row mt-3 ml-2 h-24">
+    <div className="flex flex-row mt-1 ml-2 h-24">
       {cardItems.map((item, index) => (
         <motion.div
           key={index}
