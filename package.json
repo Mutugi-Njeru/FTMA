@@ -13,6 +13,7 @@
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "@react-google-maps/api": "^2.20.6",
+    "@vercel/speed-insights": "^1.2.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.8",
     "date-fns": "^4.1.0",
