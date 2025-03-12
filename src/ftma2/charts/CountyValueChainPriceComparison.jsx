@@ -95,14 +95,102 @@ const CountyValueChainPriceComparison = () => {
   const counties = [...new Set(chartData.map((item) => item.county))];
 
   return (
-    <div className="ml-4 m-2 shadow-sm border border-gray-200 bg-slate-50 rounded-xl">
-      {/* Top Section */}
-      <div className="bg-slate-100 m-2 rounded-lg">
-        <div className="text-sm font-semibold p-2">
+    // <div className="ml-4 m-2 shadow-sm border border-gray-200 bg-slate-50 rounded-xl">
+    //   {/* Top Section */}
+    //   <div className="bg-slate-100 m-2 rounded-lg">
+    //     <div className="text-sm font-semibold p-2">
+    //       County Value Chain Price Comparison
+    //     </div>
+
+    //     <div className="flex items-center space-x-2 p-2">
+    //       <input
+    //         type="date"
+    //         value={startDate}
+    //         onChange={(e) => setStartDate(e.target.value)}
+    //         className="border rounded-lg text-sm pr-1"
+    //       />
+    //       <input
+    //         type="date"
+    //         value={endDate}
+    //         onChange={(e) => setEndDate(e.target.value)}
+    //         className="border rounded-lg text-sm pr-1"
+    //       />
+    //       <Select
+    //         options={productOptions}
+    //         value={selectedProduct}
+    //         onChange={handleProductChange}
+    //         styles={customSelectStyles}
+    //         className="w-28 text-xs"
+    //       />
+    //       <button
+    //         onClick={handleDownload}
+    //         className="p-1 text-black rounded-lg flex items-center justify-center text-sm"
+    //       >
+    //         <FiDownload size={16} />
+    //       </button>
+    //     </div>
+    //   </div>
+
+    //   {/* Chart Section */}
+    //   <div
+    //     id="chart-container"
+    //     className="w-full flex items-center justify-center"
+    //   >
+    //     {chartData.length === 0 ? (
+    //       <div className="flex items-center justify-center h-64">
+    //         <p className="text-gray-500">No data to display</p>
+    //       </div>
+    //     ) : (
+    //       <ResponsiveContainer width="100%" height={300}>
+    //         <BarChart data={chartData}>
+    //           <CartesianGrid strokeDasharray="3 3" />
+    //           <XAxis
+    //             dataKey="county"
+    //             tick={{
+    //               dy: 10,
+    //               textAnchor: "middle",
+    //               fontSize: 12,
+    //               fill: "#333",
+    //             }}
+    //           />
+    //           <YAxis
+    //             label={{
+    //               value: "Price per Kg",
+    //               angle: -90,
+    //               position: "insideLeft",
+    //             }}
+    //           />
+    //           <Tooltip />
+    //           <Bar
+    //             dataKey="farmPrice"
+    //             fill="#bab600"
+    //             name="Farm Price"
+    //             barSize={20}
+    //           />
+    //           <Bar
+    //             dataKey="retailPrice"
+    //             fill="#3b2b1f"
+    //             name="Retail Price"
+    //             barSize={20}
+    //           />
+    //           <Bar
+    //             dataKey="wholesalePrice"
+    //             fill="#73b5cd"
+    //             name="Wholesale Price"
+    //             barSize={20}
+    //           />
+    //         </BarChart>
+    //       </ResponsiveContainer>
+    //     )}
+    //   </div>
+    // </div>
+    <div className="bg-slate-50 p-4 rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-slate-100 p-4 rounded-lg">
+        <div className="text-lg font-semibold">
           County Value Chain Price Comparison
         </div>
-
-        <div className="flex items-center space-x-2 p-2">
+        <div className="flex items-center space-x-2 mt-2">
+          {/* ... existing input and select elements ... */}
           <input
             type="date"
             value={startDate}
@@ -131,18 +219,15 @@ const CountyValueChainPriceComparison = () => {
         </div>
       </div>
 
-      {/* Chart Section */}
-      <div
-        id="chart-container"
-        className="w-full flex items-center justify-center"
-      >
+      <div id="chart-container" className="mt-4 h-96 lg:h-[500px]">
         {chartData.length === 0 ? (
-          <div className="flex items-center justify-center h-64">
+          <div className="flex items-center justify-center h-full">
             <p className="text-gray-500">No data to display</p>
           </div>
         ) : (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
+              {/* ... existing chart elements ... */}
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis
                 dataKey="county"

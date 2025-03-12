@@ -123,49 +123,144 @@ function CountyPriceTrends() {
   };
 
   return (
-    <div className=" bg-slate-50 p-4">
-      <div className="max-w-7xl mx-auto rounded-xl shadow-sm border border-gray-200 p-2">
-        <div className="bg-slate-100 p-2 rounded-lg">
-          <h1 className="text-sm font-semibold text-gray-900 mb-2 ">
-            County Price Trends
-          </h1>
-          <div className="flex items-center space-x-3 ">
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="border rounded-lg text-sm px-2"
-            />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="border rounded-lg text-sm px-2"
-            />
-            <Select
-              options={countyOptions}
-              value={selectedCounty}
-              onChange={handleCountyChange}
-              styles={customSelectStyles}
-              className="w-32 text-xs"
-              placeholder="County"
-            />
-            <Select
-              options={productOptions}
-              value={selectedProduct}
-              onChange={handleProductChange}
-              styles={customSelectStyles}
-              className="w-32 text-xs"
-              placeholder="Product"
-            />
-            <button className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed">
-              <FiDownload size={22} />
-            </button>
-          </div>
-        </div>
+    // <div className=" bg-slate-50 p-4">
+    //   <div className="max-w-7xl mx-auto rounded-xl shadow-sm border border-gray-200 p-2">
+    //     <div className="bg-slate-100 p-2 rounded-lg">
+    //       <h1 className="text-sm font-semibold text-gray-900 mb-2 ">
+    //         County Price Trends
+    //       </h1>
+    //       <div className="flex items-center space-x-3 ">
+    //         <input
+    //           type="date"
+    //           value={startDate}
+    //           onChange={(e) => setStartDate(e.target.value)}
+    //           className="border rounded-lg text-sm px-2"
+    //         />
+    //         <input
+    //           type="date"
+    //           value={endDate}
+    //           onChange={(e) => setEndDate(e.target.value)}
+    //           className="border rounded-lg text-sm px-2"
+    //         />
+    //         <Select
+    //           options={countyOptions}
+    //           value={selectedCounty}
+    //           onChange={handleCountyChange}
+    //           styles={customSelectStyles}
+    //           className="w-32 text-xs"
+    //           placeholder="County"
+    //         />
+    //         <Select
+    //           options={productOptions}
+    //           value={selectedProduct}
+    //           onChange={handleProductChange}
+    //           styles={customSelectStyles}
+    //           className="w-32 text-xs"
+    //           placeholder="Product"
+    //         />
+    //         <button className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed">
+    //           <FiDownload size={22} />
+    //         </button>
+    //       </div>
+    //     </div>
 
+    //     {chartData.length > 0 ? (
+    //       <ResponsiveContainer width="100%" height={300}>
+    //         <LineChart data={chartData}>
+    //           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+    //           <XAxis
+    //             dataKey="date"
+    //             tickFormatter={(date) => format(new Date(date), "MMM d")}
+    //             stroke="#6b7280"
+    //           >
+    //             <Label value="Date" offset={-5} position="insideBottom" />
+    //           </XAxis>
+    //           <YAxis stroke="#6b7280">
+    //             <Label
+    //               value="Price (Ksh)"
+    //               angle={-90}
+    //               position="insideLeft"
+    //               offset={0}
+    //               style={{ textAnchor: "middle" }}
+    //             />
+    //           </YAxis>
+    //           <Tooltip />
+    //           {/* <Legend /> */}
+    //           <Line
+    //             type="monotone"
+    //             dataKey="farmPrice"
+    //             stroke="#5a3d2a"
+    //             strokeWidth={2}
+    //             name="Farm Price"
+    //           />
+    //           <Line
+    //             type="monotone"
+    //             dataKey="wholesalePrice"
+    //             stroke="#bab600"
+    //             strokeWidth={2}
+    //             name="Wholesale Price"
+    //           />
+    //           <Line
+    //             type="monotone"
+    //             dataKey="retailPrice"
+    //             stroke="#73b5cd"
+    //             strokeWidth={2}
+    //             name="Retail Price"
+    //           />
+    //         </LineChart>
+    //       </ResponsiveContainer>
+    //     ) : (
+    //       <div className="text-center py-20">
+    //         <div className="text-gray-400 mb-2">No data to display</div>
+    //       </div>
+    //     )}
+    //   </div>
+    // </div>
+    <div className="bg-slate-50 p-4 rounded-xl shadow-sm border border-gray-200">
+      {/* Top Section */}
+      <div className="bg-slate-100 p-4 rounded-lg">
+        <h1 className="text-lg font-semibold text-gray-900 mb-4">
+          County Price Trends
+        </h1>
+        <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border rounded-lg text-sm px-2 py-1 w-full sm:w-auto"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border rounded-lg text-sm px-2 py-1 w-full sm:w-auto"
+          />
+          <Select
+            options={countyOptions}
+            value={selectedCounty}
+            onChange={handleCountyChange}
+            styles={customSelectStyles}
+            className="w-full sm:w-32 text-xs"
+            placeholder="County"
+          />
+          <Select
+            options={productOptions}
+            value={selectedProduct}
+            onChange={handleProductChange}
+            styles={customSelectStyles}
+            className="w-full sm:w-32 text-xs"
+            placeholder="Product"
+          />
+          <button className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed">
+            <FiDownload size={22} />
+          </button>
+        </div>
+      </div>
+
+      {/* Chart Section */}
+      <div className="mt-4 h-96 lg:h-[500px]">
         {chartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis
@@ -185,7 +280,6 @@ function CountyPriceTrends() {
                 />
               </YAxis>
               <Tooltip />
-              {/* <Legend /> */}
               <Line
                 type="monotone"
                 dataKey="farmPrice"

@@ -231,116 +231,226 @@ function MarketPriceTrends() {
   };
 
   return (
-    <div className=" bg-slate-50">
-      <div className="max-w-7xl mx-auto p-4">
-        <div className=" rounded-xl shadow-sm border border-gray-200 p-2">
-          <div className="bg-slate-100 p-2 rounded-lg">
-            <div className="flex items-center justify-between mb-2">
-              <h1 className="text-sm font-semibold text-gray-900">
-                Market Price Trends
-              </h1>
-              <div className="text-sm text-gray-500">
-                Last updated: {format(new Date(), "MMM d, yyyy")}
-              </div>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 ml-1">
-              <input
-                type="date"
-                value={startDate}
-                onChange={handleStartDateChange}
-                className="border rounded-lg text-sm pl-1"
-              />
-              <input
-                type="date"
-                value={endDate}
-                onChange={handleEndDateChange}
-                className="border rounded-lg text-sm pl-1"
-              />
-              <Select
-                options={countyOptions}
-                value={selectedCounty}
-                onChange={handleCountyChange}
-                styles={customSelectStyles}
-                className="w-28 text-xs"
-                placeholder="County"
-              />
-              <Select
-                options={marketOptions}
-                value={selectedMarket}
-                onChange={handleMarketChange}
-                styles={customSelectStyles}
-                className="w-28 text-xs"
-                placeholder="Market"
-              />
-              <Select
-                options={productOptions}
-                value={selectedProduct}
-                onChange={handleProductChange}
-                styles={customSelectStyles}
-                className="w-32 text-xs"
-                placeholder="Product"
-              />
-              <button
-                onClick={handleDownload}
-                className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed"
-              >
-                <FiDownload size={22} />
-              </button>
-            </div>
-          </div>
+    // <div className=" bg-slate-50">
+    //   <div className="max-w-7xl mx-auto p-4">
+    //     <div className=" rounded-xl shadow-sm border border-gray-200 p-2">
+    //       <div className="bg-slate-100 p-2 rounded-lg">
+    //         <div className="flex items-center justify-between mb-2">
+    //           <h1 className="text-sm font-semibold text-gray-900">
+    //             Market Price Trends
+    //           </h1>
+    //           <div className="text-sm text-gray-500">
+    //             Last updated: {format(new Date(), "MMM d, yyyy")}
+    //           </div>
+    //         </div>
+    //         <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3 ml-1">
+    //           <input
+    //             type="date"
+    //             value={startDate}
+    //             onChange={handleStartDateChange}
+    //             className="border rounded-lg text-sm pl-1"
+    //           />
+    //           <input
+    //             type="date"
+    //             value={endDate}
+    //             onChange={handleEndDateChange}
+    //             className="border rounded-lg text-sm pl-1"
+    //           />
+    //           <Select
+    //             options={countyOptions}
+    //             value={selectedCounty}
+    //             onChange={handleCountyChange}
+    //             styles={customSelectStyles}
+    //             className="w-28 text-xs"
+    //             placeholder="County"
+    //           />
+    //           <Select
+    //             options={marketOptions}
+    //             value={selectedMarket}
+    //             onChange={handleMarketChange}
+    //             styles={customSelectStyles}
+    //             className="w-28 text-xs"
+    //             placeholder="Market"
+    //           />
+    //           <Select
+    //             options={productOptions}
+    //             value={selectedProduct}
+    //             onChange={handleProductChange}
+    //             styles={customSelectStyles}
+    //             className="w-32 text-xs"
+    //             placeholder="Product"
+    //           />
+    //           <button
+    //             onClick={handleDownload}
+    //             className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed"
+    //           >
+    //             <FiDownload size={22} />
+    //           </button>
+    //         </div>
+    //       </div>
 
-          {isLoading ? (
-            <div className="text-center py-20">
-              <div className="text-gray-400 mb-2">Loading...</div>
-            </div>
-          ) : chartData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis
-                  dataKey="priceDate"
-                  tickFormatter={(date) => format(new Date(date), "MMM d")}
-                  stroke="#6b7280"
-                />
-                <YAxis stroke="#6b7280" />
-                <Tooltip content={<CustomTooltip />} />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="farmPrice"
-                  stroke="#5a3d2a"
-                  strokeWidth={2}
-                  dot={{ fill: "#5a3d2a" }}
-                  name="Farm Price"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="wholesalePrice"
-                  stroke="#bab600"
-                  strokeWidth={2}
-                  dot={{ fill: "#bab600" }}
-                  name="Market Price"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="retailPrice"
-                  stroke="#73b5cd"
-                  strokeWidth={2}
-                  dot={{ fill: "#73b5cd" }}
-                  name="Retail Price"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="text-center py-20">
-              <div className="text-gray-400 mb-2">No data to display</div>
-              <p className="text-sm text-gray-500">
-                Select all filters to view the price trends
-              </p>
-            </div>
-          )}
+    //       {isLoading ? (
+    //         <div className="text-center py-20">
+    //           <div className="text-gray-400 mb-2">Loading...</div>
+    //         </div>
+    //       ) : chartData.length > 0 ? (
+    //         <ResponsiveContainer width="100%" height={300}>
+    //           <LineChart data={chartData}>
+    //             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+    //             <XAxis
+    //               dataKey="priceDate"
+    //               tickFormatter={(date) => format(new Date(date), "MMM d")}
+    //               stroke="#6b7280"
+    //             />
+    //             <YAxis stroke="#6b7280" />
+    //             <Tooltip content={<CustomTooltip />} />
+    //             <Legend />
+    //             <Line
+    //               type="monotone"
+    //               dataKey="farmPrice"
+    //               stroke="#5a3d2a"
+    //               strokeWidth={2}
+    //               dot={{ fill: "#5a3d2a" }}
+    //               name="Farm Price"
+    //             />
+    //             <Line
+    //               type="monotone"
+    //               dataKey="wholesalePrice"
+    //               stroke="#bab600"
+    //               strokeWidth={2}
+    //               dot={{ fill: "#bab600" }}
+    //               name="Market Price"
+    //             />
+    //             <Line
+    //               type="monotone"
+    //               dataKey="retailPrice"
+    //               stroke="#73b5cd"
+    //               strokeWidth={2}
+    //               dot={{ fill: "#73b5cd" }}
+    //               name="Retail Price"
+    //             />
+    //           </LineChart>
+    //         </ResponsiveContainer>
+    //       ) : (
+    //         <div className="text-center py-20">
+    //           <div className="text-gray-400 mb-2">No data to display</div>
+    //           <p className="text-sm text-gray-500">
+    //             Select all filters to view the price trends
+    //           </p>
+    //         </div>
+    //       )}
+    //     </div>
+    //   </div>
+    // </div>
+    <div className="bg-slate-50 p-4 rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-slate-100 p-4 rounded-lg">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-lg font-semibold text-gray-900">
+            Market Price Trends
+          </h1>
+          <div className="text-sm text-gray-500">
+            Last updated: {format(new Date(), "MMM d, yyyy")}
+          </div>
+        </div>
+        <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
+          {/* ... existing input and select elements ... */}
+          <input
+            type="date"
+            value={startDate}
+            onChange={handleStartDateChange}
+            className="border rounded-lg text-sm pl-1"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={handleEndDateChange}
+            className="border rounded-lg text-sm pl-1"
+          />
+          <Select
+            options={countyOptions}
+            value={selectedCounty}
+            onChange={handleCountyChange}
+            styles={customSelectStyles}
+            className="w-28 text-xs"
+            placeholder="County"
+          />
+          <Select
+            options={marketOptions}
+            value={selectedMarket}
+            onChange={handleMarketChange}
+            styles={customSelectStyles}
+            className="w-28 text-xs"
+            placeholder="Market"
+          />
+          <Select
+            options={productOptions}
+            value={selectedProduct}
+            onChange={handleProductChange}
+            styles={customSelectStyles}
+            className="w-32 text-xs"
+            placeholder="Product"
+          />
+          <button
+            onClick={handleDownload}
+            className="p-1 text-black rounded-lg flex items-center justify-center text-sm disabled:cursor-not-allowed"
+          >
+            <FiDownload size={22} />
+          </button>
         </div>
       </div>
+
+      {isLoading ? (
+        <div className="text-center py-20">
+          <div className="text-gray-400 mb-2">Loading...</div>
+        </div>
+      ) : chartData.length > 0 ? (
+        <div className="mt-4 h-96 lg:h-[500px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+              <XAxis
+                dataKey="priceDate"
+                tickFormatter={(date) => format(new Date(date), "MMM d")}
+                stroke="#6b7280"
+              />
+              <YAxis stroke="#6b7280" />
+              <Tooltip content={<CustomTooltip />} />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="farmPrice"
+                stroke="#5a3d2a"
+                strokeWidth={2}
+                dot={{ fill: "#5a3d2a" }}
+                name="Farm Price"
+              />
+              <Line
+                type="monotone"
+                dataKey="wholesalePrice"
+                stroke="#bab600"
+                strokeWidth={2}
+                dot={{ fill: "#bab600" }}
+                name="Market Price"
+              />
+              <Line
+                type="monotone"
+                dataKey="retailPrice"
+                stroke="#73b5cd"
+                strokeWidth={2}
+                dot={{ fill: "#73b5cd" }}
+                name="Retail Price"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      ) : (
+        <div className="text-center py-20">
+          <div className="text-gray-400 mb-2">No data to display</div>
+          <p className="text-sm text-gray-500">
+            Select all filters to view the price trends
+          </p>
+        </div>
+      )}
     </div>
   );
 }

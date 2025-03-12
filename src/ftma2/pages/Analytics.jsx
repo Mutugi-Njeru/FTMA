@@ -5,13 +5,26 @@ import CountyValueChainPriceComparison from "../charts/CountyValueChainPriceComp
 
 const Analytics = () => {
   return (
-    <div>
-      <MarketPriceTrends />
-      <CountyPriceTrends />
-      <div className="mb-5">
-        {" "}
-        {/* Add margin-bottom using Tailwind */}
-        <CountyValueChainPriceComparison />
+    // <div>
+    //   <MarketPriceTrends />
+    //   <CountyPriceTrends />
+    //   <div className="mb-5">
+    //     {" "}
+    //     {/* Add margin-bottom using Tailwind */}
+    //     <CountyValueChainPriceComparison />
+    //   </div>
+    // </div>
+    <div className="p-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="lg:col-span-2">
+          <MarketPriceTrends />
+        </div>
+        <div className="lg:col-span-2">
+          <CountyPriceTrends />
+        </div>
+        <div className="lg:col-span-2">
+          <CountyValueChainPriceComparison />
+        </div>
       </div>
     </div>
   );
